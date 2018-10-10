@@ -9,7 +9,6 @@ import {
   // uploadProfileImage,
   uploadStockImage
 } from '../../actions/profileAction';
-import cloudinary from '../../config/Keys';
 
 class ImageUpload extends Component {
   constructor(props) {
