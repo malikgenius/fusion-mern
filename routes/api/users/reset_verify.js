@@ -100,16 +100,16 @@ router.post('/forgot', (req, res) => {
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            return console.log(error);
+            // return console.log(error);
           }
-          console.log('Message sent: %s', info.messageId);
+          // console.log('Message sent: %s', info.messageId);
           // Preview only available when sending through an Ethereal account
-          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+          // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         });
         return res.json('Please check your email for reset link');
       })
       .catch(err => {
-        console.log('Error in nodemailer', err);
+        // console.log('Error in nodemailer', err);
       });
   });
 });
@@ -143,7 +143,7 @@ router.post('/changepassword/:token', (req, res) => {
     'local.resetPasswordExpires': { $gt: Date.now() }
   }).then(user => {
     if (!user) {
-      console.log('Invalid or Expired Token');
+      // console.log('Invalid or Expired Token');
       return res.status(404).json('Invalid or Expired Token');
     }
     user.local.password = password;
@@ -155,7 +155,7 @@ router.post('/changepassword/:token', (req, res) => {
         res.json('Password Changed Successfully, Please go to login page.');
       })
       .catch(err => {
-        console.log(err);
+        // console.log(err);
         res.status(400).json('Something went wrong, please try again later');
       });
   });
@@ -168,7 +168,7 @@ router.get(
   '/verifyemailresend',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    console.log(req.user);
+    // console.log(req.user);
     // Verificaiton Email sending Process ..
     if (req.user.local.active) {
       return res.status(404).json({ verified: 'user is already verified' });
@@ -208,11 +208,11 @@ router.get(
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return console.log(error);
+        // return console.log(error);
       }
-      console.log('Message sent: %s', info.messageId);
+      // console.log('Message sent: %s', info.messageId);
       // Preview only available when sending through an Ethereal account
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
       res.json({
         Email: `verification Email sent to ${req.user.local.email}`
       });
@@ -272,11 +272,11 @@ router.post('/contact', (req, res) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      return console.log(error);
+      // return console.log(error);
     }
-    console.log('Message sent: %s', info.messageId);
+    // console.log('Message sent: %s', info.messageId);
     // Preview only available when sending through an Ethereal account
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   });
   return res.json('Thanks, we have recieved your email.');
 });

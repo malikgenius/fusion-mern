@@ -79,5 +79,9 @@ app.listen(port, err => {
   if (err) {
     return console.log(`Error: ${err}`);
   }
-  console.log(`MERN Front2Back App is listening on ${port}`);
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`Stock App is in Production ENV & listening on ${port}`);
+  } else {
+    console.log(`local Dev environment loaded, listening on ${port}`);
+  }
 });

@@ -19,7 +19,7 @@ router.get(
   (req, res) => {
     const errors = {};
     //paginate custom options we have to add all sorting, limiting etc in these options only.
-    console.log(req.query);
+    // console.log(req.query);
     const pageNumber = req.query.page;
     // if (req.query.page)
     // console.log(req.query.page);
@@ -60,7 +60,7 @@ router.get(
   (req, res) => {
     const errors = {};
     //paginate custom options we have to add all sorting, limiting etc in these options only.
-    console.log(req.query);
+    // console.log(req.query);
     const pageNumber = req.query.page;
     const search = req.query.search;
     const option = req.query.option;
@@ -127,7 +127,7 @@ router.get(
 
           return res.status(404).json('There is no Item Available');
         }
-        console.log(stock.column);
+        // console.log(stock.column);
         res.json(stock);
       })
       .catch(err => res.status(404).json(err));
@@ -265,7 +265,7 @@ router.post(
     // Joi Validation Check
     const Validate = Joi.validate(req.body, schema);
     if (Validate.error) {
-      console.log(Validate.error.details[0].message);
+      // console.log(Validate.error.details[0].message);
       return res.status(400).send(Validate.error.details[0].message);
     }
 
@@ -298,7 +298,7 @@ router.post(
             //its just to see new updated profile on the fly in return and frontEnd
             { new: true }
           ).then(stock => {
-            console.log(stock);
+            // console.log(stock);
             return res.json(stock);
           });
         }
@@ -390,7 +390,7 @@ router.post(
     // Joi Validation Check
     const Validate = Joi.validate(req.body, schema);
     if (Validate.error) {
-      console.log(Validate.error.details[0].message);
+      // console.log(Validate.error.details[0].message);
       return res.status(400).send(Validate.error.details[0].message);
     }
     // Get Fields for Profile -- WARNING HAVE TO CHECK THIS

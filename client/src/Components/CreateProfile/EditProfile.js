@@ -106,8 +106,7 @@ class EditProfile extends Component {
     }
     this.refs.cropper.getCroppedCanvas().toBlob(blob => {
       let imageUrl = URL.createObjectURL(blob);
-      console.log(imageUrl);
-      console.log(this.state.image);
+
       this.setState({
         cropResult: imageUrl,
         image: blob
@@ -130,7 +129,6 @@ class EditProfile extends Component {
         // headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then(res => {
-        console.log(res.data);
         this.setState({
           imageurl: res.data.secure_url,
           imagepublicid: res.data.public_id,

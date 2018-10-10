@@ -67,7 +67,6 @@ class ImageUpload extends Component {
   };
 
   render() {
-    console.log(this.state.files[0]);
     return (
       <div className="create-profile">
         <div className="container">

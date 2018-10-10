@@ -112,9 +112,9 @@ router.post('/register', (req, res) => {
           if (error) {
             return console.log(error);
           }
-          console.log('Message sent: %s', info.messageId);
+          // console.log('Message sent: %s', info.messageId);
           // Preview only available when sending through an Ethereal account
-          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+          // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
           return res.json(
             `${name} your account was created successfuly, please check ${email} for the verification link`
           );
@@ -130,7 +130,7 @@ router.post('/register', (req, res) => {
 // @ Public Route
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+  // console.log(email, password);
   // Joi Validation
   // loginValidation(req.body, res);
   const schema = {
@@ -177,7 +177,7 @@ router.post('/login', (req, res) => {
           }
 
           jwt.sign(payload, secretOrKey, { expiresIn: '24h' }, (err, token) => {
-            console.log({ token: 'Bearer ' + token });
+            // console.log({ token: 'Bearer ' + token });
             // have to use Object to get its value in localStorage in react, or it will be difficult ..
             // so token will be the object key and value will be the actual token with Bearer
             res.json({ token: 'Bearer ' + token });
@@ -187,7 +187,7 @@ router.post('/login', (req, res) => {
         }
       })
       .catch(err => {
-        console.log(err);
+        // console.log(err);
       });
   });
 });
@@ -218,7 +218,7 @@ router.post(
       secretOrKey,
       { expiresIn: '24h' },
       (err, token) => {
-        console.log('Bearer ' + token);
+        // console.log('Bearer ' + token);
         res.json('Bearer ' + token);
       }
     );
@@ -248,7 +248,7 @@ router.post(
       secretOrKey,
       { expiresIn: '24h' },
       (err, token) => {
-        console.log({ token: 'Bearer ' + token });
+        // console.log({ token: 'Bearer ' + token });
         res.json('Bearer ' + token);
       }
     );
@@ -265,7 +265,7 @@ router.get(
   }),
   // passport.authenticate('googleToken', { session: false }),
   (req, res) => {
-    console.log('req.user', req.user);
+    // console.log('req.user', req.user);
     res.json(
       `Hello ${req.user.local.name ||
         req.user.google.name ||

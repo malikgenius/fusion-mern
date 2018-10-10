@@ -72,12 +72,12 @@ router.post('/', (req, res) => {
       // return console.log(req.file);
       // console.log(req.body);
 
-      console.log(req.body);
+      // console.log(req.body);
       cloudinary.v2.uploader.upload(
         // need path of the file, if its single we dont need req.files[0].path
         req.file.path,
         (err, response) => {
-          console.log(response, err);
+          // console.log(response, err);
           const imageURL = response.secure_url;
           const imageName = response.original_name;
           // console.log(imageURL, imageName);

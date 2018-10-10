@@ -20,7 +20,7 @@ class GoogleOauth extends Component {
     if (this.props.auth.isAuthenticated) {
       return this.props.history.push('/dashboard');
     } else {
-      console.log('');
+      // console.log('');
     }
   };
 
