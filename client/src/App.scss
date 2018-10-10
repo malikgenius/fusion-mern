@@ -1,0 +1,210 @@
+$bg-color: #333;
+$font-color: #fffafa;
+$primary-color: #17a2b8;
+$dark-overlay: rgba(0, 0, 0, 0.7);
+$dark-overlay-burger: rgba(46, 40, 40, 0.9);
+$font-size: 42px;
+
+body {
+  .footerModal {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  // background-color: $dark-overlay;
+}
+// .row {
+//   margin-right: 0;
+//   margin-left: 0;
+// }
+// .a {
+//   color: $font-color;
+// }
+.home-section {
+  background: $bg-color;
+  // background-color: $dark-overlay;
+  color: $font-color;
+  background: url('/img/background.jpg') no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 700px;
+  position: relative;
+  width: 100%;
+  .dark-overlay {
+    background-color: $dark-overlay;
+    position: absolute;
+    background-size: cover;
+    height: 700px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  .home-inner {
+    padding-top: 100px;
+    // background-color: $dark-overlay;
+  }
+  // .explore-head-section {
+  //   padding-top: 100px;
+  // }
+}
+
+.explore-head-section {
+  background: $bg-color;
+}
+
+.card-form {
+  opacity: 0.9;
+}
+
+// .fa {
+//   color: $primary-color;
+//   background: #fff;
+//   padding: 4px;
+//   border-radius: 5px;
+//   font-size: $font-size;
+// }
+
+.navbar {
+  border-bottom: $primary-color 3px solid;
+  // opacity: 0.9;
+}
+.nav-item {
+  opacity: 1;
+}
+
+.navbar-header {
+  float: left;
+  padding: 15px;
+  text-align: center;
+  width: 100%;
+}
+.navbar-brand {
+  float: none;
+}
+
+// dropDown toggle and Drop Down
+// .dropdown-menu {
+//   color: 'none';
+//   top: 20px;
+// }
+// .dropdown-menu div {
+//   :hover {
+//     color: 'none' !important;
+//   }
+//   :active {
+//     color: 'none';
+//   }
+// }
+
+.btn-link {
+  color: 'white';
+}
+
+.dropdown-item div {
+  :active {
+    color: 'none';
+  }
+}
+
+.btn-btn-secondary {
+  background: 'none';
+  border: 'none';
+  :hover {
+    background: 'none';
+    border: 'none';
+  }
+}
+
+// React Burger Menu
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 36px;
+  top: 36px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #e2e0e0;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: $dark-overlay-burger;
+  // padding: 2.5em 1.5em 0;
+  font-size: $font-size;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #85804e;
+  padding: 0.8em;
+}
+
+/* Individual item */
+.bm-item {
+  display: outline-block;
+  color: whitesmoke;
+  // box-shadow: inset 0 -1px rgb(124, 123, 123);
+}
+.bm-item:hover {
+  text-decoration: none;
+  color: lightgray;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(240, 9, 9, 0.3);
+}
+
+// .menu-item {
+//   color: white;
+// }
+
+// react-js-pagination
+// .pagination > li > a,
+// .pagination > li > span {
+//   position: relative;
+//   float: left;
+//   padding: 6px 12px;
+//   line-height: 1.42857143;
+//   text-decoration: none;
+//   color: #337ab7;
+//   background-color: #fff;
+//   border: 1px solid #ddd;
+//   margin-left: -1px;
+// }
+
+// Another Style of Pagination
+
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  line-height: 1.42857143;
+  text-decoration: none;
+  color: #337ab7;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin-left: -1px;
+}
