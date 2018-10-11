@@ -11,7 +11,11 @@ import {
 } from 'reactstrap';
 // Search bar imports
 import SpinnerLottie from '../Common/spinnerLottie';
-import { getProfiles, getSearchedProfiles } from '../../actions/profileAction';
+import {
+  getProfiles,
+  getSearchedProfiles,
+  clearAllProfiles
+} from '../../actions/profileAction';
 import StockItem from './StockItem';
 import Pagination from 'react-js-pagination';
 //Below one is  More famous than react-js-pagination
@@ -32,10 +36,10 @@ class SearchStocks extends Component {
       page: 1
     };
   }
-  //   componentDidMount = () => {
-  //     this.setState({ page: this.props.profile.page });
-  //     this.props.getProfiles(this.props.profile.page);
-  //   };
+  componentDidMount = () => {
+    // this.setState({ page: this.props.profile.page });
+    this.props.clearAllProfiles(this.props.profile.page);
+  };
   componentWillReceiveProps = nextProps => {
     // this will define which page user was on the last time.
     if (nextProps.profile.page) {
@@ -305,5 +309,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default connect(
   mapStateToProps,
-  { getProfiles, getSearchedProfiles }
+  { getProfiles, getSearchedProfiles, clearAllProfiles }
 )(SearchStocks);

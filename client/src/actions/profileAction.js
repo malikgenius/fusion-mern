@@ -42,6 +42,7 @@ export const getProfiles = page => dispatch => {
 // SEARCH PROFILES FOR SPECIFIC RECORD
 export const getSearchedProfiles = (page, search, option) => dispatch => {
   dispatch(setProfileLoading());
+  dispatch(clearAllProfiles());
   axios
     .get(`/api/stock/search`, {
       params: { page, search, option }
