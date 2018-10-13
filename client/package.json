@@ -68,6 +68,7 @@
     "react-s3-uploader": "^4.8.0",
     "react-scroll": "^1.7.10",
     "react-smooth": "^1.0.0",
+    "react-to-print": "^2.0.0-alpha-4",
     "react-toastify": "^4.3.2",
     "reactstrap": "^6.4.0",
     "redux": "^4.0.0",
@@ -135,7 +136,6 @@
   },
   "devDependencies": {
     "node-sass": "^4.9.3",
-    "react-to-print": "^2.0.0-alpha-4",
     "sass-loader": "^7.1.0"
   }
 }
