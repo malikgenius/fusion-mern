@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 // import Barcode from 'react-barcode';
 import QRCode from 'qrcode.react';
+import ReactToPrint from 'react-to-print';
 import { getProfileById } from '../../actions/profileAction';
 
 import Spinner from '../Common/spinnerLottie';
@@ -28,17 +29,7 @@ class QrCode extends Component {
     } else {
       profileContent = (
         <div>
-          <div className="row">
-            <div className="col-md-6">
-              <Link
-                to={`/stock/${this.props.match.params.id}`}
-                className="btn btn-light mb-3 float-left"
-              >
-                Back to Stocks
-              </Link>
-            </div>
-          </div>
-
+          <div className="row" />
           <div className=" row">
             <div className="col-md-6 m-auto">
               <QRCode
@@ -63,7 +54,24 @@ class QrCode extends Component {
       <div>
         <div className="container">
           <div className="row">
-            <div className="col-md-12">{profileContent}</div>
+            <div className="col-md-6">
+              <Link
+                to={`/stock/${this.props.match.params.id}`}
+                className="btn btn-light mb-3 float-left"
+              >
+                Back to Stocks
+              </Link>
+            </div>
+            {/* react-to-print ref function below on qrcode */}
+            <div ref={el => (this.componentRef = el)} className="col-md-12">
+              {profileContent}
+            </div>
+          </div>
+          <div>
+            <ReactToPrint
+              trigger={() => <a href="#">Print this out!</a>}
+              content={() => this.componentRef}
+            />
           </div>
         </div>
       </div>

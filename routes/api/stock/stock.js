@@ -28,8 +28,11 @@ router.get(
     Stock.paginate(
       // we can leave the query empty like below if dont want any specific record.
       {},
+      // below is the projection, even we can ask for few key values from the server, like only the name and date etc.
       {
         // limit will come from frontend header or params but if it doesnt, default || 10 i set it up.
+        // for example { column: 1, _id: 0} this will only send us column and _id but if _id: 0 means not even id is required.
+
         limit: parseInt(20, 10) || 1,
         // page: page || 1,
         page: parseInt(pageNumber, 10) || 1,
