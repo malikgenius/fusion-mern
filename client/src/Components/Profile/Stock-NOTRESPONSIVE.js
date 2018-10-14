@@ -27,6 +27,32 @@ class Profile extends Component {
     judul: 'Lintang.pdf'
   };
 
+  //jspdf generator
+  // unduhPdf = e => {
+  //   e.preventDefault();
+  //   var doc = new jsPDF();
+
+  //   // var doc = new jsPDF({
+  //   //   // orientation: 'landscape',
+  //   //   unit: 'in',
+  //   //   // format: [4, 2]  // tinggi, lebar
+  //   //   format: [this.state.tinggi, this.state.lebar]
+  //   // });
+  //   doc.text(
+  //     `PDF size: ${this.state.tinggi} x ${this.state.lebar} in`,
+  //     0.5,
+  //     0.5
+  //   );
+  //   doc.text(`PDF filename: ${this.state.column}`, 0.5, 0.8);
+  //   doc.text(`Recipient: ${this.state.well}`, 0.5, 1.1);
+  //   doc.text(`Message: ${this.state.pesan}`, 0.5, 1.4);
+  //   doc.addImage(this.state.imageurl, 'JPEG', 15, 40, 180, 180);
+  //   // doc.addImage(this.state.gambar, 'JPEG', 0.5, 2, 2.5, 2.5);
+  //   // format: (image_file, 'image_type', X_init, Y_init, X_fin, Y_fin)
+
+  //   doc.save(`${this.state.judul}`);
+  // };
+
   componentDidMount = () => {
     if (this.props.match.params.id) {
       this.props.getProfileById(this.props.match.params.id);
@@ -60,53 +86,44 @@ class Profile extends Component {
   onDocumentLoadSuccess = ({ numPages }) => {
     this.setState({ numPages });
   };
+
   render() {
+    console.log(this.props.profile.profile);
     const { profile, loading } = this.props.profile;
-    // Full Screen Contents
-    let profileContentBig;
+    let profileContent;
+
     if (profile === null || loading) {
-      profileContentBig = <Spinner />;
+      profileContent = <Spinner />;
     } else {
-      profileContentBig = (
-        <div className="container">
-          <div className="row ">
-            {/* <div className=" d-flex justify-content-center"> */}
-            <div className="col col-sm">
-              {profile.imageurl ? (
-                <a href={profile.imageurl} target="_blank">
-                  <img
-                    className="rounded mx-auto d-block"
-                    src={profile.imageurl}
-                    alt="Stock Image"
-                    style={{ width: '200px' }}
-                  />
-                </a>
-              ) : (
-                <img
-                  src="/img/placeholder.jpg"
-                  alt="Stock Image"
-                  className="rounded mx-auto d-block"
-                  style={{ width: '200px' }}
-                />
-              )}
-            </div>
-            <div className="col col-sm">
-              <div className="lead  alert alert-light">
-                Well No:
-                {'     '}
-                {profile.well}
-                <br />
-                Bay: {profile.bay}
-                <br />
-                Column: {profile.column}
-                <br />
-                Row: {profile.row}
-                <br />
-                Side: {profile.side}
-                <br />
-              </div>
-            </div>
-            <div className="col col-sm">
+      profileContent = (
+        <div>
+          <div className="row">
+            {/* <div className="col-md-6">
+              <Barcode
+                value={`${profile._id} ${' '} `}
+                // width="2"
+                // height={'100'}
+                format="CODE128B"
+                displayValue={true}
+                fontOptions=""
+                font="monospace"
+                textAlign="center"
+                textPosition="bottom"
+                // textMargin="2"
+                // fontSize="20"
+                background="#ffffff"
+                lineColor="#000000"
+                // margin="10"
+                // marginTop="10"
+                // marginBottom="undefined"
+                // marginLeft="undefined"
+                // marginRight="undefined"
+              />
+            </div> */}
+          </div>
+
+          <div className=" d-flex justify-content-center">
+            <div className="mr-3 flex-fill">
               <Link
                 to={`/qrcode/${profile._id}`}
                 // target="_blank"
@@ -125,80 +142,48 @@ class Profile extends Component {
                 />
               </Link>
             </div>
-          </div>
-        </div>
-        // </div>
-      );
-    }
-
-    // Small Screen Mobile Phone Contents
-    let profileContentSmall;
-    if (profile === null || loading) {
-      profileContentSmall = <Spinner />;
-    } else {
-      profileContentSmall = (
-        <div className="container">
-          <div className="card">
-            {/* <div className=" d-flex justify-content-center"> */}
-
-            {profile.imageurl ? (
-              <img
-                className="card-img-top"
-                src={profile.imageurl}
-                alt="Card image cap"
-              />
-            ) : (
-              <img
-                className="card-img-top"
-                src="/img/placeholder.jpg"
-                alt="Card image cap"
-              />
-            )}
-
-            <div className="card-body">
-              <h5 className="card-title">Card title</h5>
-              <p className="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
+            <div className="lead flex-fill alert alert-light">
+              Well No:
+              {'     '}
+              {profile.well}
+              <br />
+              Bay: {profile.bay}
+              <br />
+              Column: {profile.column}
+              <br />
+              Row: {profile.row}
+              <br />
+              Side: {profile.side}
+              <br />
             </div>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">Cras justo odio</li>
-              <li className="list-group-item">Dapibus ac facilisis in</li>
-              <li className="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div className="card-body">
-              <a href="#" className="card-link">
-                Card link
-              </a>
-              <a href="#" className="card-link">
-                Another link
-              </a>
-            </div>
-            <div className="card-img-bottom text-center">
-              <QRCode
-                // below value can take a link to site, or anything.
-                // value="https://localhost:3000/"
-                // here we will share
-                value={`
-                ${'        '}https://malikgen.com/stock/${profile._id}
-                `}
-                // size={'128'}
-                // bgColor={'#0000FF'}
-                level={'L'}
-                renderAs={'svg'}
-              />
+            <div className="lead flex-fill ">
+              {profile.imageurl ? (
+                <a href={profile.imageurl} target="_blank">
+                  <img
+                    className="rounded mx-auto d-block"
+                    src={profile.imageurl}
+                    alt="Stock Image"
+                    style={{ width: '300px' }}
+                  />
+                </a>
+              ) : (
+                <img
+                  src="/img/placeholder.jpg"
+                  alt="Stock Image"
+                  className="rounded mx-auto d-block"
+                  style={{ width: '300px' }}
+                />
+              )}
             </div>
           </div>
         </div>
-        // </div>
       );
     }
 
     return (
       <div>
         <div className="container">
-          <div className="row ">
+          <div className="row">
             <div />
             <br />
             <br />
@@ -207,36 +192,20 @@ class Profile extends Component {
                 Back to Stocks
               </Link>
             </div>
-          </div>
-          <div className="d-none d-md-block">
             <div ref={el => (this.componentRef = el)} className="col-md-12">
-              {profileContentBig}
+              {profileContent}
             </div>
-            <div className="mt-3">
-              <ReactToPrint
-                trigger={() => (
-                  <a className="" href="#">
-                    Print this out!
-                  </a>
-                )}
-                content={() => this.componentRef}
-              />
-              {/* </div> */}
-            </div>
-          </div>
-
-          {/* Small Screen Only On Mobile  */}
-          <div className="d-md-none ">
-            <div ref={el => (this.componentRef = el)} className="col-md-12">
-              {profileContentSmall}
-            </div>
+            <ReactToPrint
+              trigger={() => <a href="#">Print this out!</a>}
+              content={() => this.componentRef}
+            />
           </div>
           {/* below content is out of print Area and logic is if profile show buttons as they have profile._id which will through error if no profile */}
           {!profile ? (
             ''
           ) : (
             <div>
-              <div className="row d-none d-md-block">
+              <div className="row">
                 <div className="col col-4 m-auto">
                   <div style={{ marginTop: '60px' }}>
                     {/* show only on middle and big screens  */}
