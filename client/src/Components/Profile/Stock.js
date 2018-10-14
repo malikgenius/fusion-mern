@@ -175,7 +175,7 @@ class Profile extends Component {
                 Another link
               </a>
             </div>
-            <div className="card-img-bottom text-center">
+            {/* <div className="card-img-bottom text-center">
               <QRCode
                 // below value can take a link to site, or anything.
                 // value="https://localhost:3000/"
@@ -188,7 +188,7 @@ class Profile extends Component {
                 level={'L'}
                 renderAs={'svg'}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         // </div>
@@ -208,11 +208,11 @@ class Profile extends Component {
               </Link>
             </div>
           </div>
-          <div className="d-none d-md-block">
+          <div className="d-none d-sm-block">
             <div ref={el => (this.componentRef = el)} className="col-md-12">
               {profileContentBig}
             </div>
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <ReactToPrint
                 trigger={() => (
                   <a className="" href="#">
@@ -221,12 +221,11 @@ class Profile extends Component {
                 )}
                 content={() => this.componentRef}
               />
-              {/* </div> */}
-            </div>
+            </div> */}
           </div>
 
           {/* Small Screen Only On Mobile  */}
-          <div className="d-md-none ">
+          <div className="d-sm-none ">
             <div ref={el => (this.componentRef = el)} className="col-md-12">
               {profileContentSmall}
             </div>
@@ -237,39 +236,40 @@ class Profile extends Component {
           ) : (
             <div>
               <div className="row d-none d-md-block">
-                <div className="col col-4 m-auto">
+                <div className="col col-8 m-auto">
                   <div style={{ marginTop: '60px' }}>
                     {/* show only on middle and big screens  */}
                     <div className="btn-group  d-md-block m-auto" role="group">
-                      <button
-                        // onClick={this.onDeleteProfile}
-                        className="btn btn-danger mr-1 text-white"
+                      {/* <button className="btn btn-outline-primary mr-1 "> */}
+                      <Link
+                        className="btn btn-outline-primary mr-1 "
+                        to={`/edit-profile/${profile._id}`}
+                        // style={{ textDecoration: 'none'}}
                       >
-                        <Link
-                          to={`/edit-profile/${profile._id}`}
-                          style={{ textDecoration: 'none', color: 'white' }}
-                        >
-                          <i className="fas fa-clipboard-list  mr-1 text-white" />
-                          Edit Stock
-                        </Link>
-                      </button>
+                        <i className="fas fa-clipboard-list  mr-1 " /> Edit
+                      </Link>
+                      {/* </button> */}
+
+                      <Link
+                        className="btn btn-outline-info mr-1 "
+                        to={`/print-stock/${profile._id}`}
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <i className="fas fa-print mr-1 " />
+                        Print Page
+                      </Link>
+
                       <button
                         onClick={this.onDeleteStock}
-                        className="btn btn-danger"
+                        className="btn btn-outline-danger"
                       >
-                        <i className="fas fa-user-circle text-white mr-1" />
-                        Delete Stock
+                        <i className="fas fa-user-circle  mr-1" />
+                        Delete
                       </button>
-                      {/* generate pdf from jspdf module. */}
-                      {/* <button onClick={this.unduhPdf} className="btn btn-danger">
-                         <i className="fas fa-user-circle text-white mr-1" />
-                         Generate PDF
-                       </button> */}
                     </div>
                   </div>
                 </div>
               </div>
-              {/* show only on Small screens --- Mobiles only  */}
             </div>
           )}
         </div>

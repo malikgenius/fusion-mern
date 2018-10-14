@@ -24,6 +24,7 @@ import UploadProfileImage from './Components/CreateProfile/UploadProfileImage';
 import Stocks from './Components/Profiles/Stocks';
 import SearchStocks from './Components/SearchStocks/SearchStocks';
 import Stock from './Components/Profile/Stock';
+import PrintStock from './Components/Profile/PrintStock';
 
 import ProfileNotFound from './Components/Profile/ProfileNotFound';
 import QrCode from './Components/Profile/QrCode';
@@ -75,6 +76,7 @@ class App extends Component {
               <Route path="/stocks" component={Stocks} />
               <Route path="/search-stock" component={SearchStocks} />
               <Route path="/stock/:id" component={Stock} />
+              <Route path="/print-stock" component={PrintStock} />
 
               <Route path="/qrcode/:id" component={QrCode} />
             </Switch>
