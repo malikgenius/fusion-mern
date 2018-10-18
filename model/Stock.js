@@ -32,9 +32,16 @@ const StockSchema = new Schema({
     lowercase: true
   },
   depth: {
-    type: String,
-    required: true,
-    lowercase: true
+    min: {
+      type: Number,
+      required: true,
+      lowercase: true
+    },
+    max: {
+      type: Number,
+      required: true,
+      lowercase: true
+    }
   },
   box: {
     type: String,

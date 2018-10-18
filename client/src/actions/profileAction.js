@@ -113,6 +113,7 @@ export const createProfile = (formData, history) => dispatch => {
   axios
     .post('/api/stock', formData)
     .then(res => {
+      console.log(res.data);
       dispatch({
         type: GET_PROFILE,
         payload: res.data

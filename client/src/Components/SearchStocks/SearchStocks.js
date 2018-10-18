@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+// import './SearchStock.css';
 import {
   Button,
   InputGroup,
@@ -16,7 +17,8 @@ import {
   getSearchedProfiles,
   clearAllProfiles
 } from '../../actions/profileAction';
-import StockItem from './StockItem';
+// import StockItem from './StockItem';
+import StockItem from '../Profiles/StockItem';
 import Pagination from 'react-js-pagination';
 //Below one is  More famous than react-js-pagination
 import ReactPaginate from 'react-paginate';
@@ -96,6 +98,7 @@ class SearchStocks extends Component {
             <div className="col-md-12">
               <h1 className="display-4 text-center">Stock Records</h1>
               <p className="lead text-center">Search to get required records</p>
+
               {/* Searchbar to search the stocks ..  */}
               <div style={{ marginTop: 50, marginBottom: 50 }}>
                 <InputGroup>
@@ -155,6 +158,16 @@ class SearchStocks extends Component {
                       </DropdownItem>
                     </DropdownMenu>
                   </InputGroupButtonDropdown>
+                  {/* <input
+                    type="text"
+                    name="search"
+                    className="p-4 border-0"
+                    placeholder={
+                      <i className="fab fa-searchengin text-info fa-lg" />
+                    }
+                    onChange={this.onChange}
+                    value={this.state.search}
+                  /> */}
                   <Input
                     name="search"
                     className="p-4"

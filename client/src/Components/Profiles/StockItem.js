@@ -45,7 +45,10 @@ class StockItem extends Component {
         <td>{profile.box}</td>
         <td>{profile.row}</td>
         <td>{profile.column}</td>
-        <td>{profile.depth}</td>
+        <td>
+          <td className="border-0">{profile.depth.min} </td>
+          <td className="border-0">{profile.depth.max}</td>
+        </td>
         <td>{profile.side}</td>
         <td>{profile.well}</td>
         <td>{profile.box}</td>
@@ -69,15 +72,19 @@ class StockItem extends Component {
       <div>
         {/* <h4 className="mb-4">Experience Credentials</h4> */}
         <div className=" d-md-none">{stockSmall}</div>
-        <table className="table d-none d-md-table table-striped table-bordered">
-          <thead className="">
+        <table className="table d-none d-md-table table-striped table-bordered ">
+          <thead className="text-center align-top">
             <tr>
               {/* <th scope="col">Id</th> */}
               <th scope="col">BAY</th>
               <th scope="col">BOX</th>
               <th scope="col">ROW</th>
               <th scope="col">COLUMN</th>
-              <th scope="col">DEPTH</th>
+              <th scope="col" className="text-center text-muted">
+                DEPTH
+                <th className="border-0 text-muted">Min</th>
+                <th className="border-0 text-muted">Max</th>
+              </th>
               <th scope="col">SIDE</th>
               <th scope="col">WELL NUMBER</th>
               <th scope="col">BOX NUMBER</th>

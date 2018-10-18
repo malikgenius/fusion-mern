@@ -1,0 +1,21 @@
+MONGODB FAKE DATA GENERATOR 
+
+https://github.com/feliixx/mgodatagen
+
+first generate fake data upload it to local Mongodb once everything is good in testing env, upload it to Mlab to show it to client.
+
+
+./mgodatagen -f config.json
+./mgodatagen -f fakedata.json in our case
+
+
+
+
+mongoexport -h ds219672.mlab.com:19672 -d mern-front2back -c stocks -u malikgen -p whitethund3r -o stocks.csv -f "bay,box,row,column,depth,side,well number,box number,type of sample,status,date,barcode"
+
+EMPORT DATA TO MONGODB 
+
+mongoimport -h ds219672.mlab.com:19672 -d mern-front2back -c stocks -u malikgen -p whitethund3r --file stocks.json --drop
+
+
+// git push myorigin master ..... this command will upload it to malik-stock

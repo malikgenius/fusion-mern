@@ -242,11 +242,24 @@ router.post(
         .min(1)
         .max(100)
         .required(),
-      depth: Joi.string()
+      depth: Joi.object().keys({
+        min: Joi.number()
+          .integer()
+          .min(1)
+          .max(100000),
+        max: Joi.number()
+          .integer()
+          .min(2)
+          .max(100000)
+      }),
+      // depth: Joi.string()
+      //   .required()
+      //   .min(1)
+      //   .max(400),
+      box: Joi.number()
+        .integer()
         .required()
-        .min(1)
-        .max(400),
-      box: Joi.string().required(),
+        .allow(''),
       sample: Joi.string()
         .required()
         .min(1)
@@ -268,7 +281,7 @@ router.post(
     // Joi Validation Check
     const Validate = Joi.validate(req.body, schema);
     if (Validate.error) {
-      // console.log(Validate.error.details[0].message);
+      console.log(Validate.error.details[0].message);
       return res.status(400).send(Validate.error.details[0].message);
     }
 
@@ -367,10 +380,16 @@ router.post(
         .min(1)
         .max(100)
         .required(),
-      depth: Joi.string()
-        .required()
-        .min(1)
-        .max(400),
+      depth: Joi.object().keys({
+        min: Joi.number()
+          .integer()
+          .min(1)
+          .max(100000),
+        max: Joi.number()
+          .integer()
+          .min(2)
+          .max(100000)
+      }),
       box: Joi.string().required(),
       sample: Joi.string()
         .required()

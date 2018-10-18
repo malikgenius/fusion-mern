@@ -7,10 +7,29 @@ import QRCode from 'qrcode.react';
 // import jsPDF from 'jspdf';
 import 'jspdf/dist/jspdf.min.js';
 import ReactToPrint from 'react-to-print';
+// Material UI Design for Buttons and Icons
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Icon from '@material-ui/core/Icon';
+import DeleteIcon from '@material-ui/icons/Delete';
+import NavigationIcon from '@material-ui/icons/Navigation';
 
 import Spinner from '../Common/spinnerLottie';
 
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
+  }
+});
+
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
     bay: '',
     box: '',
@@ -194,7 +213,7 @@ class Profile extends Component {
         // </div>
       );
     }
-
+    const { classes } = this.props;
     return (
       <div>
         <div className="container">

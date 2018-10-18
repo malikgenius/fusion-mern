@@ -16,9 +16,13 @@ import HeaderNavbar from './Components/HeaderNavbar';
 import FooterModal from './Components/FooterModal';
 // Dashboard & Profile Components
 import Dashboard from './Components/Home/Dashboard';
-import CreateProfile from './Components/CreateProfile/CreateProfile';
+// import CreateProfile from './Components/CreateProfile/CreateProfile';
+import CreateProfile from './Components/CreateProfile/CreateMaterialUiForm';
+import RangeSlider from './Components/CreateProfile/RangeSlider';
 import ImageUpload from './Components/CreateProfile/ImageUpload';
-import EditProfile from './Components/CreateProfile/EditProfile';
+// import EditProfile from './Components/CreateProfile/EditProfile';
+import EditProfile from './Components/CreateProfile/EditMaterialUiForm';
+
 import UploadProfileImage from './Components/CreateProfile/UploadProfileImage';
 // Stocks
 import Stocks from './Components/Profiles/Stocks';
@@ -66,7 +70,9 @@ class App extends Component {
               <Route path="/" exact component={Dashboard} />
               <Route path="/notfound" component={ProfileNotFound} />
               <Route path="/dashboard" component={Dashboard} />
+              {/* <Route path="/createstock" component={CreateProfile} /> */}
               <Route path="/createstock" component={CreateProfile} />
+              <Route path="/range-slider" component={RangeSlider} />
               <Route path="/imageupload" component={ImageUpload} />
               <Route path="/edit-profile/:id" component={EditProfile} />
               <Route
