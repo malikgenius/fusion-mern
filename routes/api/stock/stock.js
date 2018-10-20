@@ -52,6 +52,42 @@ router.get(
   }
 );
 
+// @route   GET api/stock/string .... to search _id or box as a string 2 int in db, bec regex wont search for int or objectID
+// @desc    Get all stocks
+// @access  Private
+router.get(
+  '/int',
+  // passport.authenticate('jwt', {
+  //   session: false
+  // }),
+  (req, res) => {
+    console.log(req.query);
+    const pageNumber = req.query.page;
+    const search = req.query.search;
+    const option = req.query.option;
+
+    Stock.paginate(
+      { [option]: { $in: search } },
+      {
+        limit: parseInt(20, 10) || 1,
+        // page: page || 1,
+        page: parseInt(pageNumber, 10) || 1,
+        // sort by latest Date
+        sort: { date: -1 }
+      }
+    )
+      .then(stocks => {
+        if (!stocks) {
+          // errors.noprofile = 'There are no profiles';
+          return res.status(404).json('There are no profiles');
+        }
+        // console.log(stocks);
+        return res.json(stocks);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
 // @route   GET api/stock/all
 // @desc    Get all stocks
 // @access  Private
@@ -63,10 +99,13 @@ router.get(
   (req, res) => {
     const errors = {};
     //paginate custom options we have to add all sorting, limiting etc in these options only.
-    // console.log(req.query);
+    console.log(req.query);
     const pageNumber = req.query.page;
     const search = req.query.search;
     const option = req.query.option;
+    // if (option === 'box' || option === '_id') {
+    // const mysearch = parseInt(search, 10);
+    // console.log(typeof search);
     // below will search the exact word upper or lower but not more that that.
     const regex = new RegExp(['^', search, '$'].join(''), 'i');
     //below will search for malik but if malikmazhar is available it will bring that as well. $ is not at the end will continue looking for similar words.
@@ -82,9 +121,10 @@ router.get(
       //   // search by id or any other specific field
       //   // { _id: { $in: '5bbb1e19f07bf42c5741c2ea' } }, OR   // { column: { $in: search } },
       //   // query / search by option by using brakets [variable] to replace mongoose Key
+      // below is suitable for box search as it searches in numbers and strings both but regex wont do it. or i dont know how to still
       // { [option]: { $in: search } },
 
-      // Lets use Regular Expression to find UpperCase as well
+      // Lets use Regular Expression to find UpperCase as well but only string, numbers can be search with below query
       { [option]: { $in: regexFree } },
       //   // below will search in all given fields till it finds it. but it will look everywhere more load.
       // { $or: [{ bay: search }, { column: search }, { _id: search }] },
@@ -109,6 +149,63 @@ router.get(
         return res.json(stocks);
       })
       .catch(err => res.status(404).json(err));
+    // }
+  }
+);
+
+// @route   GET api/stock/total Aggregation Total Records to show on main page.
+// @desc    Get box values Aggregation
+// @access  Private
+router.get(
+  '/total',
+  // passport.authenticate('jwt', {
+  //   session: false
+  // }),
+  (req, res) => {
+    const errors = {};
+    // Stock.aggregate([{ $match: { box: '3' } }]).then(res => {
+    //   console.log(res);
+    // });
+    Stock.aggregate([
+      {
+        $group: { _id: '', total_records: { $sum: 1 } }
+      }
+    ])
+      .then(box => {
+        console.log(box);
+        res.json(box);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+);
+
+// @route   GET api/stock/box Aggregation different boxes to show on main page.
+// @desc    Get box values Aggregation
+// @access  Private
+router.get(
+  '/boxes',
+  // passport.authenticate('jwt', {
+  //   session: false
+  // }),
+  (req, res) => {
+    const errors = {};
+    // Stock.aggregate([{ $match: { box: '3' } }]).then(res => {
+    //   console.log(res);
+    // });
+    Stock.aggregate([
+      {
+        $group: { _id: '$box', records: { $sum: 1 } }
+      }
+    ])
+      .then(box => {
+        console.log(box);
+        res.json(box);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 );
 // @route   GET api/stock/id/:id
@@ -120,7 +217,7 @@ router.get(
   //   session: false
   // }),
   (req, res) => {
-    // console.log(`PARAMS LOGS: ${req.params.id}`);
+    console.log(`PARAMS LOGS: ${req.params.id}`);
     Stock.findById(req.params.id)
       // it gets the profile by ID but not by handle .. need to research more on it.
       // Profile.findById(req.params.handle)
@@ -390,7 +487,7 @@ router.post(
           .min(2)
           .max(100000)
       }),
-      box: Joi.string().required(),
+      box: Joi.number().required(),
       sample: Joi.string()
         .required()
         .min(1)
@@ -444,7 +541,6 @@ router.post(
             //its just to see new updated profile on the fly in return and frontEnd
             { new: true }
           ).then(stock => {
-            console.log(stock);
             return res.json(stock);
           });
         }

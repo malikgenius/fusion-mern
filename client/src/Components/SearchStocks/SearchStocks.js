@@ -15,6 +15,7 @@ import SpinnerLottie from '../Common/spinnerLottie';
 import {
   getProfiles,
   getSearchedProfiles,
+  getIntStocks,
   clearAllProfiles
 } from '../../actions/profileAction';
 // import StockItem from './StockItem';
@@ -70,12 +71,20 @@ class SearchStocks extends Component {
   };
   // sending data to Stocks like search and option.
   onSearchClicked = () => {
-    // const formData = {
     const search = this.state.search;
     const option = this.state.option;
-    // };
-    this.props.getSearchedProfiles(this.state.activePage, search, option);
-    // console.log(formData);
+    // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
+    // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
+    if (this.state.option === 'box') {
+      console.log(`Going to getIntStocks ${this.state.option}`);
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === '_id') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else {
+      console.log('not going to check if statements');
+      this.props.getSearchedProfiles(this.state.activePage, search, option);
+    }
+    // this.props.getSearchedProfiles(this.state.activePage, search, option);
   };
 
   handlePageChange = pageToLoad => {
@@ -322,5 +331,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default connect(
   mapStateToProps,
-  { getProfiles, getSearchedProfiles, clearAllProfiles }
+  { getProfiles, getSearchedProfiles, getIntStocks, clearAllProfiles }
 )(SearchStocks);

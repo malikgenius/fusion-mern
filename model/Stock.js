@@ -44,7 +44,7 @@ const StockSchema = new Schema({
     }
   },
   box: {
-    type: String,
+    type: Number,
     required: true,
     lowercase: true
   },

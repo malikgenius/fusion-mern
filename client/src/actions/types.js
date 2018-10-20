@@ -18,3 +18,7 @@ export const CLEAR_ALL_PROFILES = 'CLEAR_ALL_PROFILES';
 export const GET_ERRORS_RESET = 'GET_ERRORS_RESET';
 export const GET_LOGIN_ERROR_RESET = 'GET_LOGIN_ERROR_RESET';
 export const GET_PAGINATION_PAGES = 'GET_PAGINATION_PAGES';
+// Boxes and Total Records count
+export const GET_ALL_RECORDS = 'GET_ALL_RECORDS';
+export const GET_ALL_BOXES = 'GET_ALL_BOXES';
+export const CLEAR_ALL_RECORDS = 'CLEAR_ALL_RECORDS';

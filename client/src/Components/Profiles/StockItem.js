@@ -41,19 +41,19 @@ class StockItem extends Component {
       <tr key={profile._id}>
         {/* <th /> */}
         {/* <td>{profile._id}</td> */}
-        <td>{profile.bay}</td>
-        <td>{profile.box}</td>
-        <td>{profile.row}</td>
-        <td>{profile.column}</td>
-        <td>
-          <td className="border-0">{profile.depth.min} </td>
-          <td className="border-0">{profile.depth.max}</td>
+        <td className="text-center">{profile.bay}</td>
+        <td className="text-center">{profile.box}</td>
+        <td className="text-center">{profile.row}</td>
+        <td className="text-center">{profile.column}</td>
+        <td className="border-0 text-center">
+          {profile.depth.min} - {profile.depth.max}
         </td>
-        <td>{profile.side}</td>
-        <td>{profile.well}</td>
-        <td>{profile.box}</td>
-        <td>{profile.sample}</td>
-        <td>{profile.status}</td>
+        {/* <td className="border-0">{profile.depth.max}</td> */}
+        <td className="text-capitalize text-center">{profile.side}</td>
+        <td className="text-center">{profile.well}</td>
+        {/* <td>{profile.box}</td> */}
+        <td className="text-center">{profile.sample}</td>
+        <td className="text-center">{profile.status}</td>
 
         <td className="mr-auto">
           <Link to={`/stock/${profile._id}`}>
@@ -80,14 +80,14 @@ class StockItem extends Component {
               <th scope="col">BOX</th>
               <th scope="col">ROW</th>
               <th scope="col">COLUMN</th>
-              <th scope="col" className="text-center text-muted">
+              <th scope="col" className="text-center ">
                 DEPTH
-                <th className="border-0 text-muted">Min</th>
-                <th className="border-0 text-muted">Max</th>
+                {/* <th className="border-0 text-muted">Min</th>
+                <th className="border-0 text-muted">Max</th> */}
               </th>
               <th scope="col">SIDE</th>
               <th scope="col">WELL NUMBER</th>
-              <th scope="col">BOX NUMBER</th>
+              {/* <th scope="col">BOX NUMBER</th> */}
               <th scope="col">TYPE OF SAMPLE</th>
               <th scope="col">Status</th>
               <th />

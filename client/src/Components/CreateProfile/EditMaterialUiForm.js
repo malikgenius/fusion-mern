@@ -20,6 +20,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '../Common/spinnerLottie';
 import { editStock, getProfileById } from '../../actions/profileAction';
+import { getBoxesCount } from '../../actions/countAction';
 
 // //RC-Slider config here ..
 // const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -64,30 +65,34 @@ const styles = theme => ({
 
 const Box = [
   {
-    value: 1,
+    value: '1',
     label: 'Box 1'
   },
   {
-    value: 2,
+    value: '2',
     label: 'Box 2'
   },
   {
-    value: 3,
+    value: '3',
     label: 'Box 3'
   },
   {
-    value: 4,
+    value: '4',
     label: 'Box 4'
+  },
+  {
+    value: '5',
+    label: 'Box 5'
   }
 ];
 
 const sides = [
   {
-    value: 'R',
+    value: 'r',
     label: 'R'
   },
   {
-    value: 'L',
+    value: 'l',
     label: 'L'
   }
 ];
@@ -126,6 +131,7 @@ class EditMaterialUiForm extends React.Component {
   componentDidMount = () => {
     if (this.props.match.params.id) {
       this.props.getProfileById(this.props.match.params.id);
+      this.props.getBoxesCount();
     }
   };
 
@@ -284,6 +290,7 @@ class EditMaterialUiForm extends React.Component {
   render() {
     const { classes } = this.props;
     const { errors } = this.state;
+    const { records } = this.props.count;
 
     return (
       <div className="container">
@@ -368,7 +375,7 @@ class EditMaterialUiForm extends React.Component {
                 margin="normal"
               />
 
-              <TextField
+              {/* <TextField
                 name="box"
                 select
                 label="Box No"
@@ -382,15 +389,33 @@ class EditMaterialUiForm extends React.Component {
                 }}
                 helperText="Please select the Box Number"
                 margin="normal"
-              >
-                {Box.map(option => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              > */}
+              {/* Box options are coming from count redux store, if its not loaded yet will use local box if loaded will use records */}
+              {/* {this.props.count.records
+                  ? records.map(option => (
+                      <MenuItem key={option._id} value={option._id}>
+                        Box {option._id}
+                      </MenuItem>
+                    ))
+                  : Box.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+              </TextField> */}
+              <TextField
+                required
+                name="box"
+                label="Box No"
+                className={classes.textField}
+                value={this.state.box}
+                onChange={this.handleChange}
+                margin="normal"
+                helperText="Please add or edit a box number "
+              />
               <TextField
                 id="standard-multiline-flexible"
+                fullWidth
                 name="status"
                 label="Status"
                 multiline
@@ -554,13 +579,14 @@ class EditMaterialUiForm extends React.Component {
 // };
 const mapStateToProps = state => ({
   profile: state.profile,
+  count: state.count,
   errors: state.errors,
   success: state.success
 });
 
 export default connect(
   mapStateToProps,
-  { editStock, getProfileById }
+  { editStock, getProfileById, getBoxesCount }
 )(withRouter(withStyles(styles)(EditMaterialUiForm)));
 
 // export default withStyles(styles)(TextFields);

@@ -24,6 +24,7 @@ import {
   // uploadProfileImage,
   uploadStockImage
 } from '../../actions/profileAction';
+import { getBoxesCount } from '../../actions/countAction';
 
 // //RC-Slider config here ..
 // const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -123,6 +124,10 @@ class CreateProfile extends React.Component {
     success: '',
     disabled: false,
     progress: false
+  };
+
+  componentDidMount = () => {
+    this.props.getBoxesCount();
   };
 
   componentWillReceiveProps(nextProps) {
@@ -268,6 +273,7 @@ class CreateProfile extends React.Component {
   render() {
     const { classes } = this.props;
     const { errors } = this.state;
+    const { records } = this.props.count;
 
     return (
       <div className="container">
@@ -352,7 +358,7 @@ class CreateProfile extends React.Component {
                 margin="normal"
               />
 
-              <TextField
+              {/* <TextField
                 name="box"
                 select
                 label="Box No"
@@ -366,13 +372,31 @@ class CreateProfile extends React.Component {
                 }}
                 helperText="Please select the Box Number"
                 margin="normal"
-              >
-                {Box.map(option => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              > */}
+              {/* Box options are coming from count redux store, if its not loaded yet will use local box if loaded will use records */}
+              {/* {this.props.count.records
+                  ? records.map(option => (
+                      <MenuItem key={option._id} value={option._id}>
+                        Box {option._id}
+                      </MenuItem>
+                    ))
+                  : Box.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+              </TextField> */}
+              <TextField
+                required
+                name="box"
+                label="Add New Box"
+                className={classes.textField}
+                value={this.state.box}
+                onChange={this.handleChange}
+                margin="normal"
+                helperText="Please add a box number "
+              />
+
               <TextField
                 id="standard-multiline-flexible"
                 name="status"
@@ -551,13 +575,14 @@ class CreateProfile extends React.Component {
 // };
 const mapStateToProps = state => ({
   profile: state.profile,
+  count: state.count,
   errors: state.errors,
   success: state.success
 });
 
 export default connect(
   mapStateToProps,
-  { createProfile, uploadStockImage }
+  { createProfile, uploadStockImage, getBoxesCount }
 )(withRouter(withStyles(styles)(CreateProfile)));
 
 // export default withStyles(styles)(TextFields);

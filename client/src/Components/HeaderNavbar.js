@@ -59,7 +59,7 @@ class HeaderNavbar extends React.Component {
             <span className="navbar-toggler-icon" />
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <Link className="navbar-brand" to="/">
+            <Link className="navbar-brand" to="/dashboard">
               Company Brand
             </Link>
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">

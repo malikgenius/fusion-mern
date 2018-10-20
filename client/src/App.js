@@ -7,6 +7,7 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authAction';
 import { clearCurrentProfile, clearAllProfiles } from './actions/profileAction';
+import { getTotalCount, getBoxesCount } from './actions/countAction';
 import { Provider } from 'react-redux';
 import configureStore from './reducers';
 // Private Route
@@ -15,6 +16,7 @@ import PrivateRoute from './Components/Common/PrivateRoute';
 import HeaderNavbar from './Components/HeaderNavbar';
 import FooterModal from './Components/FooterModal';
 // Dashboard & Profile Components
+import Login from './Components/Home/Login';
 import Dashboard from './Components/Home/Dashboard';
 // import CreateProfile from './Components/CreateProfile/CreateProfile';
 import CreateProfile from './Components/CreateProfile/CreateMaterialUiForm';
@@ -39,7 +41,9 @@ import 'font-awesome/css/font-awesome.min.css';
 
 // Store
 const store = configureStore();
-
+// loading total stocks and boxes detail on startup
+store.dispatch(getTotalCount());
+store.dispatch(getBoxesCount());
 // check for user
 if (localStorage.jwtToken) {
   //Set Auth token header auth setAuthToken function makes sure that Authorization Headers have the token.
@@ -67,7 +71,8 @@ class App extends Component {
           <div>
             <HeaderNavbar />
             <Switch>
-              <Route path="/" exact component={Dashboard} />
+              <Route path="/" exact component={Login} />
+              <Route path="/dashboard" component={Dashboard} />
               <Route path="/notfound" component={ProfileNotFound} />
               <Route path="/dashboard" component={Dashboard} />
               {/* <Route path="/createstock" component={CreateProfile} /> */}

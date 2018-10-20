@@ -5,6 +5,7 @@ import authReducer from './authReducer';
 import errorReducer from './errorReducer';
 import successReducer from './successReducer';
 import profileReducer from './profileReducer';
+import countReducer from './countReducer';
 
 export default () => {
   const store = createStore(
@@ -12,7 +13,8 @@ export default () => {
       auth: authReducer,
       errors: errorReducer,
       success: successReducer,
-      profile: profileReducer
+      profile: profileReducer,
+      count: countReducer
     }),
     composeWithDevTools(applyMiddleware(thunk))
   );
