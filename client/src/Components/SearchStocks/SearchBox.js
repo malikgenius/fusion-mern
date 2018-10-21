@@ -88,7 +88,11 @@ class SearchBox extends Component {
   }
   componentDidMount = () => {
     this.setState({ page: this.props.profile.page });
-
+    if (this.props.history.location.state.search) {
+      this.setState({
+        search: this.props.history.location.state.search
+      });
+    }
     if (this.props.profile.page) {
       this.setState({
         page: this.props.profile.page
@@ -143,6 +147,7 @@ class SearchBox extends Component {
     const search = this.state.search;
     const option = this.state.option;
     if (code === 13) {
+      this.props.clearAllProfiles();
       //13 is the enter keycode
       if (this.state.option === 'box') {
         this.props.getIntStocks(this.state.activePage, search, option);
@@ -158,6 +163,7 @@ class SearchBox extends Component {
   onSearchClicked = () => {
     const search = this.state.search;
     const option = this.state.option;
+    this.props.clearAllProfiles();
     // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
     // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
     if (this.state.option === 'box') {
@@ -174,7 +180,14 @@ class SearchBox extends Component {
     const search = this.state.search;
     const option = this.state.option;
     this.setState({ activePage: pageToLoad });
-    this.props.getSearchedProfiles(pageToLoad, search, option);
+    if (this.state.option === 'box') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === '_id') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else {
+      this.props.getSearchedProfiles(this.state.activePage, search, option);
+    }
+    // this.props.getSearchedProfiles(pageToLoad, search, option);
     // if (pageNumber !== this.state.pages) {
     //   this.setState({ hasMore: true });
     // }

@@ -121,7 +121,12 @@ export const getBoxStocks = (page, search, history) => dispatch => {
         type: GET_PAGINATION_PAGES,
         payload: res.data
       });
-      history.push('/search-box');
+      // this will push search value into search-box to access second and other pages ..
+      history.push({
+        pathname: '/search-box',
+        search: `?search=${search}`,
+        state: { search: search }
+      });
     })
     .catch(err =>
       dispatch({

@@ -19,8 +19,12 @@ class Login extends Component {
               Authentication Goes Here..{' '}
             </div>
             <p className="lead-md small-sm text-info text-center">
-              only authenticated users will pass this page...
+              in production only authenticated users will pass this page, click
+              on button below to access Dashboard.
             </p>{' '}
+            <Link to="/dashboard" className=" btn btn-outline-info text-center">
+              Dashboard
+            </Link>
           </div>
         </div>
       </div>

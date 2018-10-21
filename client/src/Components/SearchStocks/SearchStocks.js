@@ -128,6 +128,7 @@ class SearchStocks extends Component {
     const search = this.state.search;
     const option = this.state.option;
     if (code === 13) {
+      this.props.clearAllProfiles();
       //13 is the enter keycode
       if (this.state.option === 'box') {
         this.props.getIntStocks(this.state.activePage, search, option);
@@ -142,6 +143,7 @@ class SearchStocks extends Component {
   onSearchClicked = () => {
     const search = this.state.search;
     const option = this.state.option;
+    this.props.clearAllProfiles();
     // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
     // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
     if (this.state.option === 'box') {
