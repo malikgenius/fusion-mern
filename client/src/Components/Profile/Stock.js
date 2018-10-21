@@ -161,7 +161,10 @@ class Profile extends Component {
                 // value="https://localhost:3000/"
                 // here we will share
                 value={`
-                ${'        '}https://malikgen.com/stock/${profile._id}
+                https://sheltered-anchorage-84432.herokuapp.com/stock/${
+                  profile._id
+                },
+                Box: ${' '}${profile.box}
                 `}
                 // size={'128'}
                 // bgColor={'#0000FF'}
