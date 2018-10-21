@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import './SearchStock.css';
-import {
-  Button,
-  InputGroup,
-  InputGroupButtonDropdown,
-  Input,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from 'reactstrap';
+// Material UI imports
+import { withStyles } from '@material-ui/core/styles';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 // Search bar imports
 import SpinnerLottie from '../Common/spinnerLottie';
 import {
@@ -21,8 +16,61 @@ import {
 // import StockItem from './StockItem';
 import StockItem from '../Profiles/StockItem';
 import Pagination from 'react-js-pagination';
-//Below one is  More famous than react-js-pagination
-import ReactPaginate from 'react-paginate';
+
+// react-input-range goes here ..
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200
+  },
+  searchField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 700
+  },
+  dense: {
+    marginTop: 19
+  },
+  menu: {
+    width: 200
+  }
+});
+
+const sides = [
+  {
+    value: 'bay',
+    label: 'Bay'
+  },
+  {
+    value: 'box',
+    label: 'Box'
+  },
+  {
+    value: 'row',
+    label: 'Row'
+  },
+  {
+    value: 'column',
+    label: 'Column'
+  },
+  {
+    value: 'well',
+    label: 'Well'
+  },
+  {
+    value: 'side',
+    label: 'Side'
+  },
+  {
+    value: 'status',
+    label: 'Status'
+  }
+];
 
 class SearchStocks extends Component {
   constructor(props) {
@@ -31,7 +79,7 @@ class SearchStocks extends Component {
       dropdownOpen: false,
       splitButtonOpen: false,
       search: '',
-      option: 'bay',
+      option: '',
       activePage: 1,
       pages: '',
       total: '',
@@ -42,6 +90,11 @@ class SearchStocks extends Component {
   componentDidMount = () => {
     // this.setState({ page: this.props.profile.page });
     this.props.clearAllProfiles(this.props.profile.page);
+    if (this.props.location.search) {
+      this.setState({
+        option: this.props.location.hash
+      });
+    }
   };
   componentWillReceiveProps = nextProps => {
     // this will define which page user was on the last time.
@@ -66,8 +119,24 @@ class SearchStocks extends Component {
   };
 
   // search onChange options..
-  onChange = e => {
+  handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+  //Would like to trigger this once 'Enter' key is pressed while focused inside `<input/>`
+  enterPressed = event => {
+    const code = event.keyCode || event.which;
+    const search = this.state.search;
+    const option = this.state.option;
+    if (code === 13) {
+      //13 is the enter keycode
+      if (this.state.option === 'box') {
+        this.props.getIntStocks(this.state.activePage, search, option);
+      } else if (this.state.option === '_id') {
+        this.props.getIntStocks(this.state.activePage, search, option);
+      } else {
+        this.props.getSearchedProfiles(this.state.activePage, search, option);
+      }
+    }
   };
   // sending data to Stocks like search and option.
   onSearchClicked = () => {
@@ -76,12 +145,10 @@ class SearchStocks extends Component {
     // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
     // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
     if (this.state.option === 'box') {
-      console.log(`Going to getIntStocks ${this.state.option}`);
       this.props.getIntStocks(this.state.activePage, search, option);
     } else if (this.state.option === '_id') {
       this.props.getIntStocks(this.state.activePage, search, option);
     } else {
-      console.log('not going to check if statements');
       this.props.getSearchedProfiles(this.state.activePage, search, option);
     }
     // this.props.getSearchedProfiles(this.state.activePage, search, option);
@@ -99,6 +166,7 @@ class SearchStocks extends Component {
 
   render() {
     const { profiles, loading } = this.props.profile;
+    const { classes } = this.props;
 
     return (
       <div className="profiles">
@@ -109,90 +177,53 @@ class SearchStocks extends Component {
               <p className="lead text-center">Search to get required records</p>
 
               {/* Searchbar to search the stocks ..  */}
-              <div style={{ marginTop: 50, marginBottom: 50 }}>
-                <InputGroup>
-                  <InputGroupButtonDropdown
-                    addonType="append"
-                    isOpen={this.state.dropdownOpen}
-                    toggle={this.toggleDropDown}
+              <div className="text-center">
+                <div style={{ marginTop: 50, marginBottom: 50 }}>
+                  <TextField
+                    id="standard-select-Side"
+                    name="option"
+                    select
+                    label="Option"
+                    className={classes.textField}
+                    value={this.state.option}
+                    onChange={this.handleChange}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu
+                      }
+                    }}
+                    helperText="select search option"
+                    margin="normal"
                   >
-                    <Button
-                      className="btn btn-outline-info btn-lg"
-                      onClick={this.onSearchClicked}
-                    >
-                      {this.state.option}
-                    </Button>
-                    <DropdownToggle split outline caret />
-                    <DropdownMenu>
-                      <DropdownItem
-                        value="_id"
-                        name="option"
-                        onClick={this.onChange}
-                        // onClick={this.props.sortByChange}
-                      >
-                        ID
-                      </DropdownItem>
-                      {/* <DropdownItem value="department" onClick={this.props.sortByChange}>Department</DropdownItem> */}
-                      <DropdownItem
-                        value="bay"
-                        name="option"
-                        onClick={this.onChange}
-                        // onClick={this.props.searchchange}
-                      >
-                        BAY
-                      </DropdownItem>
-                      <DropdownItem
-                        value="box"
-                        name="option"
-                        onClick={this.onChange}
-                        // onClick={this.props.searchchange}
-                      >
-                        BOX
-                      </DropdownItem>
-                      <DropdownItem
-                        value="row"
-                        name="option"
-                        onClick={this.onChange}
-                        // onClick={this.props.searchchange}
-                      >
-                        ROW
-                      </DropdownItem>
-                      <DropdownItem
-                        value="column"
-                        name="option"
-                        onClick={this.onChange}
-                        // onClick={this.props.searchchange}
-                      >
-                        COLUMN
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </InputGroupButtonDropdown>
-                  {/* <input
-                    type="text"
+                    {sides.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField
                     name="search"
-                    className="p-4 border-0"
-                    placeholder={
-                      <i className="fab fa-searchengin text-info fa-lg" />
-                    }
-                    onChange={this.onChange}
+                    label="search"
+                    className={classes.searchField}
+                    onChange={this.handleChange}
+                    onKeyPress={this.enterPressed}
                     value={this.state.search}
-                  /> */}
-                  <Input
-                    name="search"
-                    className="p-4"
-                    placeholder="search stock"
-                    onChange={this.onChange}
-                    value={this.state.search}
+                    margin="normal"
+                    //   width="500"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <i
+                            class="fas fa-search"
+                            style={{ cursor: 'pointer' }}
+                            onClick={this.onSearchClicked}
+                          />
+                        </InputAdornment>
+                      )
+                    }}
                   />
-                  <div className="input-group-prepend">
-                    <span
-                      className="input-group-text btn"
-                      onClick={this.onSearchClicked}
-                    >
-                      <i className="fab fa-searchengin text-info fa-lg" />
-                    </span>
-                  </div>
-                </InputGroup>
+                </div>
               </div>
 
               {/* This will be shown only on Mobile and small screens ... not on Desktop */}
@@ -332,4 +363,4 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(
   mapStateToProps,
   { getProfiles, getSearchedProfiles, getIntStocks, clearAllProfiles }
-)(SearchStocks);
+)(withStyles(styles)(SearchStocks));

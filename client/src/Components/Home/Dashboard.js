@@ -24,9 +24,12 @@ class Dashboard extends Component {
               {' '}
               Inventory System Dashboard
             </div>
-            <p className="lead-md small-sm text-info text-center">
-              we have total records {this.props.count.total_records}
-            </p>{' '}
+            <div className="alert alert-light text-center h6">
+              Total records found{' '}
+              <span className="badge badge-secondary" style={{ width: '50%' }}>
+                {this.props.count.total_records}
+              </span>
+            </div>{' '}
             <div>
               {this.props.count ? (
                 <CardList boxes={this.props.count.records} />

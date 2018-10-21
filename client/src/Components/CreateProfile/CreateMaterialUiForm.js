@@ -5,7 +5,6 @@ import TextField from '@material-ui/core/TextField';
 // range slider for Depth
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
-
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 // axios dropzone cropper cloudinary all below..

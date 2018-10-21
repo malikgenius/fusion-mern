@@ -1,20 +1,84 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// Search bar imports
-import SpinnerLottie from '../Common/spinnerLottie';
-import { getProfiles, getSearchedProfiles } from '../../actions/profileAction';
-import StockItem from './StockItem';
-import Pagination from 'react-js-pagination';
-//Below one is  More famous than react-js-pagination
-import ReactPaginate from 'react-paginate';
-import SearchBar from '../Common/SearchBar';
-import Spinner from '../Common/spinnerLottie';
+// Material UI imports
+import { withStyles } from '@material-ui/core/styles';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
-class Profiles extends Component {
+import {
+  getProfiles,
+  getSearchedProfiles,
+  getIntStocks,
+  clearAllProfiles
+} from '../../actions/profileAction';
+// import StockItem from './StockItem';
+import StockItem from '../Profiles/StockItem';
+import Pagination from 'react-js-pagination';
+
+// react-input-range goes here ..
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200
+  },
+  searchField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 700
+  },
+  dense: {
+    marginTop: 19
+  },
+  menu: {
+    width: 200
+  }
+});
+
+const sides = [
+  {
+    value: 'bay',
+    label: 'Bay'
+  },
+  {
+    value: 'box',
+    label: 'Box'
+  },
+  {
+    value: 'row',
+    label: 'Row'
+  },
+  {
+    value: 'column',
+    label: 'Column'
+  },
+  {
+    value: 'well',
+    label: 'Well'
+  },
+  {
+    value: 'side',
+    label: 'Side'
+  },
+  {
+    value: 'status',
+    label: 'Status'
+  }
+];
+
+class SearchBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
+      dropdownOpen: false,
+      splitButtonOpen: false,
+      search: '',
+      option: 'box',
       activePage: 1,
       pages: '',
       total: '',
@@ -24,7 +88,27 @@ class Profiles extends Component {
   }
   componentDidMount = () => {
     this.setState({ page: this.props.profile.page });
-    this.props.getProfiles(this.props.profile.page);
+
+    if (this.props.profile.page) {
+      this.setState({
+        page: this.props.profile.page
+      });
+    }
+    if (this.props.profile.pages) {
+      this.setState({
+        pages: this.props.profile.pages
+      });
+    }
+    if (this.props.profile.total) {
+      this.setState({
+        total: this.props.profile.total
+      });
+    }
+    if (this.props.profile.limit) {
+      this.setState({
+        limit: this.props.profile.limit
+      });
+    }
   };
   componentWillReceiveProps = nextProps => {
     // this will define which page user was on the last time.
@@ -42,42 +126,63 @@ class Profiles extends Component {
     }
   };
 
-  toggleDropDown() {
+  toggleDropDown = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
+
+  // search onChange options..
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  //Would like to trigger this once 'Enter' key is pressed while focused inside `<input/>`
+  enterPressed = event => {
+    const code = event.keyCode || event.which;
+    const search = this.state.search;
+    const option = this.state.option;
+    if (code === 13) {
+      //13 is the enter keycode
+      if (this.state.option === 'box') {
+        this.props.getIntStocks(this.state.activePage, search, option);
+      } else if (this.state.option === '_id') {
+        this.props.getIntStocks(this.state.activePage, search, option);
+      } else {
+        this.props.getSearchedProfiles(this.state.activePage, search, option);
+      }
+    }
+  };
+
+  // sending data to Stocks like search and option.
+  onSearchClicked = () => {
+    const search = this.state.search;
+    const option = this.state.option;
+    // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
+    // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
+    if (this.state.option === 'box') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === '_id') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else {
+      this.props.getSearchedProfiles(this.state.activePage, search, option);
+    }
+    // this.props.getSearchedProfiles(this.state.activePage, search, option);
+  };
 
   handlePageChange = pageToLoad => {
-    // console.log(`active page is ${pageNumber}`);
+    const search = this.state.search;
+    const option = this.state.option;
     this.setState({ activePage: pageToLoad });
-    this.props.getProfiles(pageToLoad);
+    this.props.getSearchedProfiles(pageToLoad, search, option);
     // if (pageNumber !== this.state.pages) {
     //   this.setState({ hasMore: true });
     // }
   };
 
-  onSearched = (search, option) => {
-    // console.log(formData);
-    this.props.getSearchedProfiles(this.state.activePage, search, option);
-  };
-
   render() {
     const { profiles, loading } = this.props.profile;
-    // let profileItems;
-
-    // if (profiles === null || loading) {
-    //   profileItems = <SpinnerLottie />;
-    // } else {
-    //   if (profiles.length <= 0) {
-    //     profileItems = <h4>No Profiles Found .. </h4>;
-    //     // profileItems = profiles.map(profile => (
-    //     // <ProfileItem profiles={profiles} />;
-    //     // ));
-    //   } else {
-    //     <StockItem profiles={profiles} />;
-    //   }
-    // }
+    const { classes } = this.props;
 
     return (
       <div className="profiles">
@@ -86,9 +191,57 @@ class Profiles extends Component {
             <div className="col-md-12">
               <h1 className="display-4 text-center">Stock Records</h1>
               <p className="lead text-center">Search to get required records</p>
-              {/* Searchbar to search the stocks ..  */}
 
-              {/* <SearchBar onSearched={this.onSearched} /> */}
+              {/* Searchbar to search the stocks ..  */}
+              <div className="text-center">
+                <div style={{ marginTop: 50, marginBottom: 50 }}>
+                  <TextField
+                    id="standard-select-Side"
+                    name="option"
+                    select
+                    label="Option"
+                    className={classes.textField}
+                    value={this.state.option}
+                    onChange={this.handleChange}
+                    SelectProps={{
+                      MenuProps: {
+                        className: classes.menu
+                      }
+                    }}
+                    helperText="select search option"
+                    margin="normal"
+                  >
+                    {sides.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField
+                    name="search"
+                    label="search"
+                    className={classes.searchField}
+                    onChange={this.handleChange}
+                    onKeyPress={this.enterPressed}
+                    value={this.state.search}
+                    margin="normal"
+                    //   width="500"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <i
+                            class="fas fa-search"
+                            style={{ cursor: 'pointer' }}
+                            onClick={this.onSearchClicked}
+                          />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </div>
+              </div>
+
               {/* This will be shown only on Mobile and small screens ... not on Desktop */}
               <div className="container d-md-none">
                 <div className="row">
@@ -156,19 +309,7 @@ class Profiles extends Component {
                     pageRangeDisplayed="5"
                     onChange={this.handlePageChange}
                   />
-                  {/* <ReactPaginate
-                    className="pagination align-items-center d-sm-flex"
-                    hideDisabled
-                    previousLabel="prev"
-                    nextLabel="next"
-                    firstPageText="first"
-                    lastPageText="last"
-                    activePage={this.state.activePage}
-                    itemsCountPerPage={this.state.limit}
-                    pageCount={this.state.total}
-                    pageRangeDisplayed="5"
-                    onPageChange={this.handlePageChange}
-                  /> */}
+
                   {this.state.total ? (
                     <div className="alert text-muted align-middle  text-center">
                       Total records found{' '}
@@ -225,37 +366,6 @@ class Profiles extends Component {
             </div>
           </div>
         )}
-
-        {/* Infite Scroll starts here it will be only on Mobile Phones ..  */}
-        {/* <div className="container d-md-none">
-          <div className="row">
-            <div className="col-md-12">
-              <h1 className="display-4 text-center">Developer Profiles</h1>
-              <p className="lead text-center">
-                Browse and connect with developers
-              </p>
-            </div>
-          </div>
-          <InfiniteScroll
-            onScroll={this.handleLoadMore}
-            pageStart={0}
-            initialLoad={true}
-            loadMore={this.handleLoadMore}
-            hasMore={this.state.hasMoreItems}
-            isReverse={true}
-            loader={
-              <div className="loader" key={0}>
-                Loading ...
-              </div>
-            }
-          >
-           
-            {profileItems}
-          </InfiniteScroll>
-          <div>
-            <div />
-          </div>
-        </div> */}
       </div>
     );
   }
@@ -268,5 +378,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default connect(
   mapStateToProps,
-  { getProfiles, getSearchedProfiles }
-)(Profiles);
+  { getProfiles, getSearchedProfiles, getIntStocks, clearAllProfiles }
+)(withStyles(styles)(SearchBox));

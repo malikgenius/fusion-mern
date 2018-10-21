@@ -99,6 +99,38 @@ export const getIntStocks = (page, search, option) => dispatch => {
     );
 };
 
+// Box clicked on Dashboard will bring all the stocks related to box number. and history.push should take to stocks page.
+export const getBoxStocks = (page, search, history) => dispatch => {
+  console.log(typeof search);
+  console.log(search);
+  dispatch(setProfileLoading());
+  dispatch(clearAllProfiles());
+  axios
+    .get(`/api/stock/int`, {
+      params: { page, search, option: 'box' }
+    })
+    .then(res => {
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data.docs
+      });
+      // GET pagination will get all the extra pagination options to redux store
+      // total records, page number, records per page .. etc from server.
+      // this will go to Component local state via nextProps to <Pagination /> comp.
+      dispatch({
+        type: GET_PAGINATION_PAGES,
+        payload: res.data
+      });
+      history.push('/search-box');
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      })
+    );
+};
+
 export const getProfileByHandle = () => {};
 // Get Profile by ID
 export const getProfileById = id => dispatch => {

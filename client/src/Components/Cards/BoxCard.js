@@ -1,13 +1,19 @@
 /* eslint react/prop-types: 0 */
 import React, { Component } from 'react';
 import {
+  Badge,
+  Button,
   Card,
+  CardHeader,
   CardImg,
   CardText,
   CardBody,
   CardTitle,
   CardSubtitle
 } from 'reactstrap';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getBoxStocks } from '../../actions/profileAction';
 // import { Icon } from 'semantic-ui-react';
 // import ToggleButton from './ToggleButton';
 // import ModalEmployee from './ModalEmployee';
@@ -19,59 +25,39 @@ class BoxCard extends Component {
 
     this.state = {
       showModal: false,
-      copied: false
+      copied: false,
+      page: '1'
     };
   }
 
   ToggleModalEmployee = () => {
     return this.setState({ showModal: !this.state.showModal });
   };
+  OnCardClick = () => {
+    this.props.getBoxStocks(
+      this.state.page,
+      this.props.box._id,
+      this.props.history
+    );
+  };
 
   render() {
     let cardImage = null;
-    // if (this.props.employee.imageURL) {
-    //   cardImage = (
-    //     <CardImg
-    //       top
-    //       width="100%"
-    //       src={`${this.props.employee.imageURL}`}
-    //       alt="Card image cap"
-    //     />
-    //   );
-    // } else {
-    //   if (this.props.employee.gender === 'female') {
-    //     cardImage = (
-    //       <CardImg
-    //         top
-    //         width="100%"
-    //         src="/assets/female.jpg"
-    //         alt="Card image cap"
-    //       />
-    //     );
-    //   } else {
-    //     cardImage = (
-    //       <CardImg
-    //         top
-    //         width="80%"
-    //         height="80%"
-    //         src="/assets/male.jpg"
-    //         alt="Card image cap"
-    //       />
-    //     );
-    //   }
-    // }
 
     return (
-      <div>
-        <Card>
-          <div onClick={this.ToggleModalEmployee}>{cardImage}</div>
+      <div onClick={this.OnCardClick} style={{ cursor: 'pointer' }}>
+        <Card className="mb-4">
+          <CardHeader tag="h3" className="text-muted text-center">
+            Box {this.props.box._id}
+            {}
+          </CardHeader>
           {/* <CardImg top width="100%" src={`${props.employee.image}`} alt="Card image cap" /> */}
           <CardBody>
-            <CardTitle style={{ fontWeight: 500 }}>
-              Box no: {this.props.box._id}
-            </CardTitle>
             <CardSubtitle style={{ fontWeight: 300 }}>
-              Total Records Included {this.props.box.records}
+              Records found{' '}
+              <Badge color="secondary" className="">
+                {this.props.box.records}
+              </Badge>
             </CardSubtitle>
           </CardBody>
         </Card>
@@ -80,4 +66,7 @@ class BoxCard extends Component {
   }
 }
 
-export default BoxCard;
+export default connect(
+  null,
+  { getBoxStocks }
+)(withRouter(BoxCard));

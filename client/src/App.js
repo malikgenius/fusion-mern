@@ -29,6 +29,7 @@ import UploadProfileImage from './Components/CreateProfile/UploadProfileImage';
 // Stocks
 import Stocks from './Components/Profiles/Stocks';
 import SearchStocks from './Components/SearchStocks/SearchStocks';
+import SearchBox from './Components/SearchStocks/SearchBox';
 import Stock from './Components/Profile/Stock';
 import PrintStock from './Components/Profile/PrintStock';
 
@@ -86,6 +87,7 @@ class App extends Component {
               />
               <Route path="/stocks" component={Stocks} />
               <Route path="/search-stock" component={SearchStocks} />
+              <Route path="/search-box" component={SearchBox} />
               <Route path="/stock/:id" component={Stock} />
               <Route path="/print-stock" component={PrintStock} />
 
