@@ -6,6 +6,7 @@ const Joi = require('joi');
 
 // Load Profile Model
 const Stock = require('../../../model/Stock');
+const DeletedStock = require('../../../model/DeletedStock');
 const User = require('../../../model/User');
 
 // @route   GET api/stock/all
@@ -217,14 +218,14 @@ router.get(
   //   session: false
   // }),
   (req, res) => {
-    console.log(`PARAMS LOGS: ${req.params.id}`);
+    // console.log(`PARAMS LOGS: ${req.params.id}`);
     Stock.findById(req.params.id)
       // it gets the profile by ID but not by handle .. need to research more on it.
       // Profile.findById(req.params.handle)
       .then(stock => {
         if (!stock) {
           // errors.noprofile = 'There is no profile for this user';
-
+          console.log('Stock not found');
           return res.status(404).json('There is no Item Available');
         }
         // console.log(stock.column);
@@ -274,17 +275,86 @@ const bwipjs = require('bwip-js');
 //   // }),
 //   (req, res) => {
 //     const errors = {};
-
-//     Stock.findByID(req.params.stock_id)
+//     Stock.findById(req.params.stock_id)
 //       .then(profile => {
 //         if (!profile) {
-//           return res.status(404).json('There is no profile for this user');
+//           return res
+//             .status(404)
+//             .json('There is no Stock available with given Id');
 //         }
 //         return res.json(profile);
 //       })
 //       .catch(err => res.status(404).json(err));
 //   }
 // );
+
+// @route   GET api/stock/deleted
+// @desc    Get all stocks
+// @access  Private
+router.get(
+  '/deleted',
+  // passport.authenticate('jwt', {
+  //   session: false
+  // }),
+  (req, res) => {
+    const errors = {};
+    //paginate custom options we have to add all sorting, limiting etc in these options only.
+    // console.log(req.query);
+    const pageNumber = req.query.page;
+    // if (req.query.page)
+    // console.log(req.query.page);
+    // paginate will send by default 10 records per page.
+    // populate in pagination fixed by using it below, other ways do not work well with custom records from user.
+    DeletedStock.paginate(
+      // we can leave the query empty like below if dont want any specific record.
+      {},
+      // below is the projection, even we can ask for few key values from the server, like only the name and date etc.
+      {
+        // limit will come from frontend header or params but if it doesnt, default || 10 i set it up.
+        // for example { column: 1, _id: 0} this will only send us column and _id but if _id: 0 means not even id is required.
+
+        limit: parseInt(5, 10) || 1,
+        // page: page || 1,
+        page: parseInt(pageNumber, 10) || 1,
+        // sort by latest Date
+        sort: { date: -1 }
+      }
+    )
+      .then(stocks => {
+        if (!stocks) {
+          // errors.noprofile = 'There are no profiles';
+          return res.status(404).json('There are no profiles');
+        }
+        // console.log(stocks);
+        return res.json(stocks);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   GET api/stock/deleted-stock/:stock_id
+// @desc    Get Deleted Stock by Stock ID
+// @access  Private
+
+router.get(
+  '/deleted-stock/:stock_id',
+  // passport.authenticate('jwt', {
+  //   session: false
+  // }),
+  (req, res) => {
+    const errors = {};
+    DeletedStock.findById(req.params.stock_id)
+      .then(stock => {
+        if (!stock) {
+          return res
+            .status(404)
+            .json('There is no Stock available with given Id');
+        }
+        return res.json(stock);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
 
 // POST api/Profile
 // @desc Create or Update user profile
@@ -512,8 +582,10 @@ router.post(
       // console.log(Validate.error.details[0].message);
       return res.status(400).send(Validate.error.details[0].message);
     }
+    // edited Stock Array
+    let stockFields = {};
     // Get Fields for Profile -- WARNING HAVE TO CHECK THIS
-    const stockFields = {
+    stockFields = {
       bay: req.body.bay,
       column: req.body.column,
       row: req.body.row,
@@ -525,23 +597,62 @@ router.post(
       barcode: req.body.barcode,
       status: req.body.status,
       imageurl: req.body.imageurl,
-      imagepublicid: req.body.imagepublicid
+      imagepublicid: req.body.imagepublicid,
+      edited_date: Date.now()
+      // edited_stock: []
     };
 
     Stock.findById(req.body.id)
       .then(stock => {
         if (stock) {
-          // return console.log(stock);
-          // findOneAndUpdate will update existing profile if it found one.
-          // Stock.findOneAndUpdate(
+          // below will remove all old edited_stock values from the array and will make it null so we can have only one older edited stock
+          // if we dont do this, every stock will have edited_stock and that will have array [0, 1 ... ]
+          // cant save the whole stock or edit or anything, has to do the hard work to take out all the fields and add some more like deleted_date & original_id then save this to deleted_stocks collection.
+          // below will not add any edited stock but the pure stock will go to edited_stock array [], this way we can all all edited stocks only once ..
+          let original_stock = {};
+          original_stock._id = stock._id;
+          original_stock.bay = stock.bay;
+          original_stock.column = stock.column;
+          original_stock.row = stock.row;
+          original_stock.side = stock.side;
+          original_stock.well = stock.well;
+          original_stock.depth = stock.depth;
+          original_stock.box = stock.box;
+          original_stock.sample = stock.sample;
+          original_stock.status = stock.status;
+          original_stock.imageurl = stock.imageurl;
+          original_stock.imagepublicid = stock.imagepublicid;
+          original_stock.date = stock.date;
+          if (stock.edited_date) original_stock.edited_date = stock.edited_date;
+
+          // console.log(original_stock);
+
           Stock.findByIdAndUpdate(
             req.body.id,
-            { $set: stockFields },
+            {
+              bay: req.body.bay,
+              column: req.body.column,
+              row: req.body.row,
+              side: req.body.side,
+              well: req.body.well,
+              depth: req.body.depth,
+              box: req.body.box,
+              sample: req.body.sample,
+              barcode: req.body.barcode,
+              status: req.body.status,
+              imageurl: req.body.imageurl,
+              imagepublicid: req.body.imagepublicid,
+              edited_date: Date.now()
+            },
+            // { $set: stockFields },
             //new: true means res.json will return new updated profile, we dont provide new it will res.json(old profile)
             //its just to see new updated profile on the fly in return and frontEnd
             { new: true }
           ).then(stock => {
-            return res.json(stock);
+            // this will save every new edition at first place like 0 , 1 , 2
+            stock.edited_stock.unshift(original_stock);
+            stock.save().then(stock => res.json(stock));
+            // return res.json(stock);
           });
         }
       })
@@ -551,26 +662,40 @@ router.post(
   }
 );
 
-// Delete Stock
-// @Private Route
-router.delete(
-  '/deletestock/:id',
-  // passport.authenticate('jwt', {
-  //   session: false
-  // }),
-  (req, res) => {
-    // if we only want to delete the profile we can stop after below linke and after .then(() => res.json(bla bla bla ))
-    Stock.findByIdAndRemove(req.params.id)
-      .then(() => {
-        // User.findOneAndDelete({ _id: req.user.id }).then(() =>
-        return res.json('Stock Deleted Successfully');
-        // );
-      })
-      .catch(err => {
-        return res.status(400).json('Something Went Wrong, Try again Later');
+// Delete Stock and Save it to DeletedStocks collection. we have to use router.get or post but not delete as router.delete might only work for deleting stock and not saving it other collection before.
+
+router.post('/deletestock/:id', (req, res) => {
+  Stock.findOne({ _id: req.params.id }).then(stock => {
+    if (!stock) {
+      return res.status(404).json('no user found');
+    }
+    // cant save the whole stock or edit or anything, has to do the hard work to take out all the fields and add some more like deleted_date & original_id then save this to deleted_stocks collection.
+    let original_stock = {};
+    // let original_stock = stock;
+    original_stock.original_id = stock._id;
+    original_stock.bay = stock.bay;
+    original_stock.column = stock.column;
+    original_stock.row = stock.row;
+    original_stock.side = stock.side;
+    original_stock.well = stock.well;
+    original_stock.depth = stock.depth;
+    original_stock.box = stock.box;
+    original_stock.sample = stock.sample;
+    original_stock.status = stock.status;
+    original_stock.imageurl = stock.imageurl;
+    original_stock.imagepublicid = stock.imagepublicid;
+    original_stock.date = stock.date;
+    original_stock.edited_stock = stock.edited_stock;
+    if (stock.edited_date) original_stock.edited_date = stock.edited_date;
+    original_stock.deleted_date = Date.now();
+
+    new DeletedStock(original_stock).save().then(() => {
+      Stock.findOneAndRemove({ _id: req.params.id }).then(() => {
+        return res.json('Stock Deleted');
       });
-  }
-);
+    });
+  });
+});
 
 // Delete User
 // @Private Route

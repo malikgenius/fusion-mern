@@ -296,7 +296,10 @@ class EditMaterialUiForm extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-8 m-auto">
-            <Link to="/dashboard" className="btn btn-light">
+            <Link
+              to={`/stock/${this.props.match.params.id}`}
+              className="btn btn-light"
+            >
               Go Back
             </Link>
             <h1 className="display-4 text-center">Edit Stock Item</h1>

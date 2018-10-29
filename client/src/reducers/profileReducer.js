@@ -4,11 +4,13 @@ import {
   CLEAR_CURRENT_PROFILE,
   GET_PROFILES,
   CLEAR_ALL_PROFILES,
-  GET_PAGINATION_PAGES
+  GET_PAGINATION_PAGES,
+  GET_DELETED_STOCKS
 } from '../actions/types';
 const initialState = {
   profile: null,
   profiles: null,
+  deleted_stocks: null,
   loading: false
 };
 
@@ -32,6 +34,13 @@ export default (state = initialState, action) => {
         //come back to prev page it will still add :( more... find a solution of duplicate
         // profiles: state.profiles.concat(action.payload),
         profiles: action.payload,
+        loading: false
+      };
+
+    case GET_DELETED_STOCKS:
+      return {
+        ...state,
+        deleted_stocks: action.payload,
         loading: false
       };
     // get total pages from server via pagination at backend to show only those pages in FE pagination.
@@ -62,6 +71,7 @@ export default (state = initialState, action) => {
         limit: null,
         page: null
       };
+
     default:
       return state;
   }

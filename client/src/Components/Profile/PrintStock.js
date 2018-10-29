@@ -152,6 +152,30 @@ class Profile extends Component {
                 with the mussels, if you like.
               </Typography>
             </CardContent>
+            <Link
+              to={`/qrcode/${profile._id}`}
+              // target="_blank"
+            >
+              <QRCode
+                // below value can take a link to site, or anything.
+                // value="https://localhost:3000/"
+                // here we will share
+                // value={`
+                // https://sheltered-anchorage-84432.herokuapp.com/stock/${
+                //   profile._id
+                // },
+                // Box: ${' '}${profile.box}
+                // `}
+                value={`Box: ${' '}${profile.box}, ${' '} Bay: ${
+                  profile.bay
+                }, ${' '} Column: ${profile.column}
+                `}
+                // size={'128'}
+                // bgColor={'#0000FF'}
+                level={'L'}
+                renderAs={'svg'}
+              />
+            </Link>
             <CardActions className={classes.actions} disableActionSpacing>
               <IconButton
                 className={classnames(classes.expand, {

@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import {
-  getProfileById,
+  getDeletedStockById,
   deleteStock,
   ClearAllErrors
 } from '../../actions/profileAction';
@@ -62,7 +62,7 @@ const styles = theme => ({
   }
 });
 
-class Profile extends Component {
+class DeletedStock extends Component {
   state = {
     bay: '',
     box: '',
@@ -82,7 +82,7 @@ class Profile extends Component {
 
   componentDidMount = () => {
     if (this.props.match.params.id) {
-      this.props.getProfileById(this.props.match.params.id);
+      this.props.getDeletedStockById(this.props.match.params.id);
       this.props.ClearAllErrors();
     }
   };
@@ -291,5 +291,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default connect(
   mapStateToProps,
-  { getProfileById, deleteStock, ClearAllErrors }
-)(withRouter(withStyles(styles)(Profile)));
+  { getDeletedStockById, deleteStock, ClearAllErrors }
+)(withRouter(withStyles(styles)(DeletedStock)));

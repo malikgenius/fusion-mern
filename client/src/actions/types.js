@@ -22,3 +22,5 @@ export const GET_PAGINATION_PAGES = 'GET_PAGINATION_PAGES';
 export const GET_ALL_RECORDS = 'GET_ALL_RECORDS';
 export const GET_ALL_BOXES = 'GET_ALL_BOXES';
 export const CLEAR_ALL_RECORDS = 'CLEAR_ALL_RECORDS';
+// Deleted Stocks Record
+export const GET_DELETED_STOCKS = 'GET_DELETED_STOCKS';

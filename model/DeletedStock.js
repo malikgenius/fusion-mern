@@ -75,10 +75,16 @@ const StockSchema = new Schema({
   edited_date: {
     type: Date
   },
-  edited_stock: []
+  edited_stock: [],
+  original_id: {
+    type: Schema.Types.ObjectId
+  },
+  deleted_date: {
+    type: Date
+  }
 });
 
 StockSchema.plugin(mongoosePaginate);
 // const Profile = mongoose.model("profile", ProfileSchema);
 
-module.exports = Stock = mongoose.model('stock', StockSchema);
+module.exports = DeletedStock = mongoose.model('deletedstock', StockSchema);

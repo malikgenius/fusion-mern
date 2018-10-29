@@ -47,6 +47,7 @@
     "randomstring": "^1.1.5",
     "react-speech-recognition": "^1.0.7",
     "react-waypoint": "^8.0.3",
+    "semantic-ui-react": "^0.83.0",
     "twilio": "^3.19.2",
     "uuid": "^3.3.2",
     "web-push": "^3.3.2"

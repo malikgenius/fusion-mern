@@ -83,6 +83,12 @@ class HeaderNavbar extends React.Component {
               >
                 Create Stock
               </Link>
+              <Link
+                className="nav-link btn btn-link border-0 text-muted"
+                to="/deleted-stocks"
+              >
+                Deleted Stocks
+              </Link>
               <li className="nav-item">
                 <a className="nav-link disabled" href="#">
                   Sign In

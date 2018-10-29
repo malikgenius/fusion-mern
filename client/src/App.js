@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+// history to load pages from the browser url .. can copy and share the links
+import createHistory from 'history/createBrowserHistory';
 // CSS File Loaded
 import './App.scss';
+// semantic-ui css
+import 'semantic-ui-css/semantic.min.css';
 //Store Actions etc
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -32,6 +36,9 @@ import SearchStocks from './Components/SearchStocks/SearchStocks';
 import SearchBox from './Components/SearchStocks/SearchBox';
 import Stock from './Components/Profile/Stock';
 import PrintStock from './Components/Profile/PrintStock';
+// Deleted Stock
+import DeletedStocks from './Components/DeletedStocks/DeletedStocks';
+import DeletedStock from './Components/Profile/DeletedStock';
 
 import ProfileNotFound from './Components/Profile/ProfileNotFound';
 import QrCode from './Components/Profile/QrCode';
@@ -64,6 +71,9 @@ if (localStorage.jwtToken) {
   }
 }
 
+// history for url
+// browserRouter will ignore below, we need to use Router to have a custom history.
+const history = createHistory();
 class App extends Component {
   render() {
     return (
@@ -90,6 +100,8 @@ class App extends Component {
               <Route path="/search-box" component={SearchBox} />
               <Route path="/stock/:id" component={Stock} />
               <Route path="/print-stock" component={PrintStock} />
+              <Route path="/deleted-stocks" component={DeletedStocks} />
+              <Route path="/deleted-stock/:id" component={DeletedStock} />
 
               <Route path="/qrcode/:id" component={QrCode} />
             </Switch>

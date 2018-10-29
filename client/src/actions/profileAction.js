@@ -7,7 +7,9 @@ import {
   CLEAR_CURRENT_PROFILE,
   CLEAR_ALL_PROFILES,
   GET_PAGINATION_PAGES,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
+  GET_ERRORS_RESET,
+  GET_DELETED_STOCKS
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -219,10 +221,12 @@ export const editStock = (profileData, history) => dispatch => {
 export const deleteStock = (id, history) => dispatch => {
   if (
     // window.confirm will popup an alert from browser ..
+
     window.confirm('are you sure? you want to delete this Record.')
   ) {
     axios
-      .delete(`/api/stock/deletestock/${id}`)
+      // we cant use delete here as we will first save the stock in deleted stock and then delete from express ad backend.
+      .post(`/api/stock/deletestock/${id}`)
       .then(res => {
         dispatch({
           type: GET_PROFILE,
@@ -257,4 +261,71 @@ export const clearAllProfiles = () => {
   return {
     type: CLEAR_ALL_PROFILES
   };
+};
+
+// reset errors on Single Profile load, as we might get error bec of the wrong _id and when i happens we want user to go NotFound page. so at load ther should be no errros.
+
+export const ClearAllErrors = () => {
+  return {
+    type: GET_ERRORS_RESET
+  };
+};
+
+// Deleted Stocks access page only for Admin.....
+
+// Get All Profiles
+export const getDeletedStocks = page => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/stock/deleted`, {
+      params: { page }
+    })
+    .then(res => {
+      dispatch({
+        type: GET_DELETED_STOCKS,
+        payload: res.data.docs
+      });
+      // GET pagination will get all the extra pagination options to redux store
+      // total records, page number, records per page .. etc from server.
+      // this will go to Component local state via nextProps to <Pagination /> comp.
+      dispatch({
+        type: GET_PAGINATION_PAGES,
+        payload: res.data
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_DELETED_STOCKS,
+        payload: null
+      })
+    );
+};
+
+// Get Profile by ID
+export const getDeletedStockById = id => dispatch => {
+  // console.log(id);
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/stock/deleted-stock/${id}`)
+    .then(
+      res => {
+        // console.log(res.data);
+        dispatch({
+          type: GET_PROFILE,
+          payload: res.data
+        });
+      }
+
+      // if wrong handle name, we have a null profile, nextProps in Profile.js will redirect it to Page not Found route.
+    )
+    .catch(err => {
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
+      });
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
 };

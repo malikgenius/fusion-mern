@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // Search bar imports
 import SpinnerLottie from '../Common/spinnerLottie';
-import { getProfiles, getSearchedProfiles } from '../../actions/profileAction';
+import {
+  getDeletedStocks,
+  getSearchedProfiles
+} from '../../actions/profileAction';
 import StockItem from './StockItem';
 import Pagination from 'react-js-pagination';
 // facebook loader
@@ -12,7 +15,7 @@ import ReactPaginate from 'react-paginate';
 import SearchBar from '../Common/SearchBar';
 import Spinner from '../Common/spinnerLottie';
 
-class Profiles extends Component {
+class DeletedStocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +30,7 @@ class Profiles extends Component {
   componentDidMount = () => {
     this.setState({ loading: true });
     this.setState({ page: this.props.profile.page });
-    this.props.getProfiles(this.props.profile.page);
+    this.props.getDeletedStocks(this.props.profile.page);
   };
   componentWillReceiveProps = nextProps => {
     // this will define which page user was on the last time.
@@ -43,7 +46,7 @@ class Profiles extends Component {
     if (nextProps.profile.limit) {
       this.setState({ limit: nextProps.profile.limit });
     }
-    if (nextProps.profile.profiles) {
+    if (nextProps.profile.deleted_stocks) {
       this.setState({ loading: false });
     }
   };
@@ -57,7 +60,7 @@ class Profiles extends Component {
   handlePageChange = pageToLoad => {
     // console.log(`active page is ${pageNumber}`);
     this.setState({ activePage: pageToLoad });
-    this.props.getProfiles(pageToLoad);
+    this.props.getDeletedStocks(pageToLoad);
     // if (pageNumber !== this.state.pages) {
     //   this.setState({ hasMore: true });
     // }
@@ -69,7 +72,7 @@ class Profiles extends Component {
   };
 
   render() {
-    const { profiles } = this.props.profile;
+    const { deleted_stocks } = this.props.profile;
     const { loading } = this.state.loading;
     // let profileItems;
 
@@ -119,7 +122,12 @@ class Profiles extends Component {
                 </div>
               </div>
               {/* if no stock found we should not load StockItem as its maping through profiles, will generate error  */}
-              {profiles === null ? <List /> : <StockItem profiles={profiles} />}
+              {/* in reducer deleted_stocks should be null at initial stage */}
+              {deleted_stocks === null ? (
+                <List />
+              ) : (
+                <StockItem stocks={deleted_stocks} />
+              )}
             </div>
           </div>
         </div>
@@ -232,5 +240,5 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default connect(
   mapStateToProps,
-  { getProfiles, getSearchedProfiles }
-)(Profiles);
+  { getDeletedStocks, getSearchedProfiles }
+)(DeletedStocks);

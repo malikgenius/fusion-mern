@@ -3,6 +3,7 @@ import React from 'react';
 import _ from 'lodash';
 import { Container, Row, Col } from 'reactstrap';
 import BoxCard from './BoxCard';
+import BoxCardSemanticUi from './BoxCardSemanticUi';
 
 const CardList = ({ boxes }) => {
   // console.log(employees);
@@ -14,7 +15,7 @@ const CardList = ({ boxes }) => {
       return (
         <Col sm="3" key={box._id}>
           {' '}
-          <BoxCard box={box} />
+          <BoxCardSemanticUi box={box} />
         </Col>
       );
     }

@@ -36,16 +36,20 @@ class QrCode extends Component {
                 // below value can take a link to site, or anything.
                 // value="https://localhost:3000/"
                 // here we will share
-                value={`
-                https://sheltered-anchorage-84432.herokuapp.com/stock/${
-                  profile._id
-                },
-                Box: ${' '}${profile.box}
+                // value={`
+                // https://sheltered-anchorage-84432.herokuapp.com/stock/${
+                //   profile._id
+                // },
+                // Box: ${' '}${profile.box}
+                // `}
+                value={`Box: ${' '}${profile.box}, ${' '} Bay: ${
+                  profile.bay
+                }, ${' '} Column: ${profile.column}
                 `}
                 // size={'128'}
                 // bgColor={'#0000FF'}
                 level={'L'}
-                renderAs={'svg'}
+                renderAs={'canvas'}
               />
             </div>
           </div>
