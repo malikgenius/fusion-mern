@@ -11,6 +11,7 @@ import {
   getProfiles,
   getSearchedProfiles,
   getIntStocks,
+  getFreeSearch,
   clearAllProfiles
 } from '../../actions/profileAction';
 // import StockItem from './StockItem';
@@ -41,7 +42,11 @@ const styles = theme => ({
   }
 });
 
-const sides = [
+const options = [
+  {
+    value: null,
+    label: 'All'
+  },
   {
     value: 'bay',
     label: 'Bay'
@@ -67,6 +72,10 @@ const sides = [
     label: 'Side'
   },
   {
+    value: 'sample',
+    label: 'Sample'
+  },
+  {
     value: 'status',
     label: 'Status'
   }
@@ -79,7 +88,7 @@ class SearchStocks extends Component {
       dropdownOpen: false,
       splitButtonOpen: false,
       search: '',
-      option: '',
+      option: null,
       activePage: 1,
       pages: '',
       total: '',
@@ -130,9 +139,13 @@ class SearchStocks extends Component {
     if (code === 13) {
       this.props.clearAllProfiles();
       //13 is the enter keycode
+      if (this.state.option === null) {
+        this.props.getFreeSearch(this.state.activePage, search);
+      }
       if (this.state.option === 'box') {
         this.props.getIntStocks(this.state.activePage, search, option);
-      } else if (this.state.option === '_id') {
+      }
+      if (this.state.option === '_id') {
         this.props.getIntStocks(this.state.activePage, search, option);
       } else {
         this.props.getSearchedProfiles(this.state.activePage, search, option);
@@ -146,9 +159,13 @@ class SearchStocks extends Component {
     this.props.clearAllProfiles();
     // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
     // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
+    if (this.state.option === null) {
+      this.props.getFreeSearch(this.state.activePage, search);
+    }
     if (this.state.option === 'box') {
       this.props.getIntStocks(this.state.activePage, search, option);
-    } else if (this.state.option === '_id') {
+    }
+    if (this.state.option === '_id') {
       this.props.getIntStocks(this.state.activePage, search, option);
     } else {
       this.props.getSearchedProfiles(this.state.activePage, search, option);
@@ -160,7 +177,18 @@ class SearchStocks extends Component {
     const search = this.state.search;
     const option = this.state.option;
     this.setState({ activePage: pageToLoad });
-    this.props.getSearchedProfiles(pageToLoad, search, option);
+    if (this.state.option === null) {
+      this.props.getFreeSearch(pageToLoad, search);
+    }
+    if (this.state.option === 'box') {
+      this.props.getIntStocks(pageToLoad, search, option);
+    }
+    if (this.state.option === '_id') {
+      this.props.getIntStocks(pageToLoad, search, option);
+    } else {
+      this.props.getSearchedProfiles(pageToLoad, search, option);
+    }
+    // this.props.getSearchedProfiles(pageToLoad, search, option);
     // if (pageNumber !== this.state.pages) {
     //   this.setState({ hasMore: true });
     // }
@@ -197,7 +225,7 @@ class SearchStocks extends Component {
                     helperText="select search option"
                     margin="normal"
                   >
-                    {sides.map(option => (
+                    {options.map(option => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
@@ -206,7 +234,7 @@ class SearchStocks extends Component {
 
                   <TextField
                     name="search"
-                    label="search"
+                    label="Search"
                     className={classes.searchField}
                     onChange={this.handleChange}
                     onKeyPress={this.enterPressed}
@@ -364,5 +392,11 @@ const mapStateToProps = (state, ownProps) => {
 };
 export default connect(
   mapStateToProps,
-  { getProfiles, getSearchedProfiles, getIntStocks, clearAllProfiles }
+  {
+    getProfiles,
+    getSearchedProfiles,
+    getFreeSearch,
+    getIntStocks,
+    clearAllProfiles
+  }
 )(withStyles(styles)(SearchStocks));

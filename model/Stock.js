@@ -11,25 +11,25 @@ const StockSchema = new Schema({
   bay: {
     type: String,
     required: true,
-    max: 40,
-    lowercase: true
+    max: 40
+    // lowercase: true
   },
   column: {
-    type: String,
-    lowercase: true
+    type: String
+    // lowercase: true
   },
   row: {
-    type: String,
-    lowercase: true
+    type: String
+    // lowercase: true
   },
   side: {
-    type: String,
-    lowercase: true
+    type: String
+    // lowercase: true
   },
   well: {
     type: String,
-    required: true,
-    lowercase: true
+    required: true
+    // lowercase: true
   },
   depth: {
     min: {
@@ -45,18 +45,18 @@ const StockSchema = new Schema({
   },
   box: {
     type: Number,
-    required: true,
-    lowercase: true
+    required: true
+    // lowercase: true
   },
   sample: {
     type: String,
-    required: true,
-    lowercase: true
+    required: true
+    // lowercase: true
   },
   barcode: {
-    type: String,
+    type: String
     // required: true,
-    lowercase: true
+    // lowercase: true
   },
   status: {
     type: String

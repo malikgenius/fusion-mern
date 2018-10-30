@@ -106,7 +106,7 @@ router.get(
     const option = req.query.option;
     // if (option === 'box' || option === '_id') {
     // const mysearch = parseInt(search, 10);
-    // console.log(typeof search);
+    console.log(typeof search, search);
     // below will search the exact word upper or lower but not more that that.
     const regex = new RegExp(['^', search, '$'].join(''), 'i');
     //below will search for malik but if malikmazhar is available it will bring that as well. $ is not at the end will continue looking for similar words.
@@ -126,9 +126,18 @@ router.get(
       // { [option]: { $in: search } },
 
       // Lets use Regular Expression to find UpperCase as well but only string, numbers can be search with below query
-      { [option]: { $in: regexFree } },
+      // Not case sensitive ... case insensitive
+      {
+        [option]: { $in: regexFree }
+      },
       //   // below will search in all given fields till it finds it. but it will look everywhere more load.
-      // { $or: [{ bay: search }, { column: search }, { _id: search }] },
+      // _id will not work with below as it requires ObjectId, and we need to do something like this.
+      // var objId = new ObjectId( (search.length < 12) ? "123456789012" : search );
+      // below is not working nested $in in $or
+      // below will only work with exact words, case sensitive ***
+      // { $or: [{ $in: [{ bay: search }] }, { $in: [{ column: search }] }] },
+      // { [option]: { $in: [search] } },
+      // { $or: [{ bay: search }, { column: search }, { sample: search }] },
 
       //   // we can leave the query empty like below if dont want any specific record.
       // {},
@@ -147,6 +156,55 @@ router.get(
           return res.status(404).json('There are no profiles');
         }
         // console.log(stocks);
+        return res.json(stocks);
+      })
+      .catch(err => res.status(404).json(err));
+    // }
+  }
+);
+
+// @route   GET api/stock/free-search
+// @desc    Get all stocks matching string...
+// @access  Private
+router.get(
+  '/freesearch',
+  // passport.authenticate('jwt', {
+  //   session: false
+  // }),
+  (req, res) => {
+    const errors = {};
+    //paginate custom options we have to add all sorting, limiting etc in these options only.
+    console.log(req.query, 'i am free search');
+    const pageNumber = req.query.page;
+    const search = req.query.search;
+    //below will search for malik but if malikmazhar is available it will bring that as well. $ is not at the end will continue looking for similar words.
+    const regexFree = new RegExp(['^', search].join(''), 'i');
+    Stock.paginate(
+      {
+        $or: [
+          { bay: search },
+          { row: search },
+          { column: search },
+          { side: search },
+          { well: search },
+          { sample: search },
+          { status: search }
+        ]
+      },
+      {
+        // limit will come from frontend header or params but if it doesnt, default || 10 i set it up.
+        limit: parseInt(20, 10) || 1,
+        // page: page || 1,
+        page: parseInt(pageNumber, 10) || 1,
+        // sort by latest Date
+        sort: { date: -1 }
+      }
+    )
+      .then(stocks => {
+        if (!stocks) {
+          return res.status(404).json('There are no profiles');
+        }
+
         return res.json(stocks);
       })
       .catch(err => res.status(404).json(err));

@@ -73,12 +73,39 @@ export const getSearchedProfiles = (page, search, option) => dispatch => {
 
 // SEARCH PROFILES for INT .... _id & box number
 export const getIntStocks = (page, search, option) => dispatch => {
-  console.log(typeof search);
   dispatch(setProfileLoading());
   dispatch(clearAllProfiles());
   axios
     .get(`/api/stock/int`, {
       params: { page, search, option }
+    })
+    .then(res => {
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data.docs
+      });
+      // GET pagination will get all the extra pagination options to redux store
+      // total records, page number, records per page .. etc from server.
+      // this will go to Component local state via nextProps to <Pagination /> comp.
+      dispatch({
+        type: GET_PAGINATION_PAGES,
+        payload: res.data
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      })
+    );
+};
+// SEARCH PROFILES FREE with REGEX
+export const getFreeSearch = (page, search) => dispatch => {
+  dispatch(setProfileLoading());
+  dispatch(clearAllProfiles());
+  axios
+    .get(`/api/stock/freesearch`, {
+      params: { page, search }
     })
     .then(res => {
       dispatch({
