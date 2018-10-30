@@ -35,7 +35,7 @@ import { Facebook } from 'react-content-loader';
 
 const styles = theme => ({
   card: {
-    maxWidth: 400
+    maxWidth: 600
   },
   media: {
     height: 0,

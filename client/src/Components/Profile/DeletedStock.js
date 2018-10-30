@@ -2,63 +2,41 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
+// Semantic UI Imports
+import { List } from 'semantic-ui-react';
+//Material UI
+// import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import TextField from '@material-ui/core/TextField';
 import {
   getDeletedStockById,
   deleteStock,
   ClearAllErrors
 } from '../../actions/profileAction';
-import QRCode from 'qrcode.react';
-//Material UI
-import { withStyles } from '@material-ui/core/styles';
-import classnames from 'classnames';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import PrintIcon from '@material-ui/icons/Print';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-// import jsPDF from 'jspdf';
-
-import 'jspdf/dist/jspdf.min.js';
-import Spinner from '../Common/spinnerLottie';
 import { Facebook } from 'react-content-loader';
 
 const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
+  dense: {
+    marginTop: 16
+  },
+  menu: {
+    width: 200
+  },
   card: {
-    maxWidth: 400
+    maxWidth: 345
   },
   media: {
-    height: 0,
-    paddingTop: '56.25%' // 16:9
-  },
-  actions: {
-    display: 'flex'
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest
-    }),
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      marginRight: -8
-    }
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)'
-  },
-  avatar: {
-    backgroundColor: red[500]
+    height: 300
   }
 });
 
@@ -134,127 +112,150 @@ class DeletedStock extends Component {
       profileContentBig = (
         <div>
           {/* Material-ui Card here ..  */}
-          <Card className={classes.card}>
-            <CardHeader
-              avatar={
-                <Avatar aria-label="Recipe" className={classes.avatar}>
-                  {profile.box}
-                </Avatar>
-              }
-              action={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title="Shrimp and Chorizo Paella"
-              subheader={<Moment format="DD/MM/YYYY">{profile.date}</Moment>}
-            />
-            <CardMedia
-              className={classes.media}
-              image={profile.imageurl}
-              title="Product Image"
-            />
-
-            <CardContent>
-              <Typography component="p">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-
-            <Link
-              to={`/qrcode/${profile._id}`}
-              // target="_blank"
-            >
-              <QRCode
-                // below value can take a link to site, or anything.
-                // value="https://localhost:3000/"
-                // here we will share
-                // value={`
-                // https://sheltered-anchorage-84432.herokuapp.com/stock/${
-                //   profile._id
-                // },
-                // Box: ${' '}${profile.box}
-                // `}
-                value={`Box: ${' '}${profile.box}, ${' '} Bay: ${
-                  profile.bay
-                }, ${' '} Column: ${profile.column}
-                `}
-                // size={'128'}
-                // bgColor={'#0000FF'}
-                level={'L'}
-                renderAs={'canvas'}
+          <div className="row">
+            <div className="col col-sm-12 mb-4">
+              <List divided relaxed className="float-left">
+                <List.Item>
+                  <List.Content>
+                    <List.Header as="a">Semantic-Org/Semantic-UI</List.Header>
+                    <List.Description as="a" className="mr-2 mb-1">
+                      Deleted on{' '}
+                      <Moment format="DD/MM/YYYY">
+                        {profile.deleted_date}
+                      </Moment>
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-sm-8">
+              <TextField
+                id="outlined-read-only-input"
+                label="BOX"
+                defaultValue={profile.box}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
               />
-            </Link>
-
-            <CardActions className={classes.actions} disableActionSpacing>
-              <Link
-                to={`/edit-profile/${profile._id}`}
-                // style={{ textDecoration: 'none'}}
-              >
-                <IconButton aria-label="Edit Stock" style={{ outline: 'none' }}>
-                  <EditIcon />
-                </IconButton>
-              </Link>
-
-              <Link to={`/print-stock/${profile._id}`}>
-                <IconButton aria-label="Print" style={{ outline: 'none' }}>
-                  <PrintIcon />
-                </IconButton>
-              </Link>
-              <IconButton
-                aria-label="Delete Stock"
-                style={{ outline: 'none' }}
-                onClick={this.onDeleteStock}
-              >
-                <DeleteIcon />
-              </IconButton>
-              <IconButton
-                className={classnames(classes.expand, {
-                  [classes.expandOpen]: this.state.expanded
-                })}
-                onClick={this.handleExpandClick}
-                aria-expanded={this.state.expanded}
-                aria-label="Show more"
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                <Typography paragraph>Method:</Typography>
-                <Typography paragraph>
-                  Heat 1/2 cup of the broth in a pot until simmering, add
-                  saffron and set aside for 10 minutes.
-                </Typography>
-                <Typography paragraph>
-                  Heat oil in a (14- to 16-inch) paella pan or a large, deep
-                  skillet over medium-high heat. Add chicken, shrimp and
-                  chorizo, and cook, stirring occasionally until lightly
-                  browned, 6 to 8 minutes. Transfer shrimp to a large plate and
-                  set aside, leaving chicken and chorizo in the pan. Add
-                  pimentón, bay leaves, garlic, tomatoes, onion, salt and
-                  pepper, and cook, stirring often until thickened and fragrant,
-                  about 10 minutes. Add saffron broth and remaining 4 1/2 cups
-                  chicken broth; bring to a boil.
-                </Typography>
-                <Typography paragraph>
-                  Add rice and stir very gently to distribute. Top with
-                  artichokes and peppers, and cook without stirring, until most
-                  of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-                  medium-low, add reserved shrimp and mussels, tucking them down
-                  into the rice, and cook again without stirring, until mussels
-                  have opened and rice is just tender, 5 to 7 minutes more.
-                  (Discard any mussels that don’t open.)
-                </Typography>
-                <Typography>
-                  Set aside off of the heat to let rest for 10 minutes, and then
-                  serve.
-                </Typography>
-              </CardContent>
-            </Collapse>
-          </Card>
+              <TextField
+                id="outlined-read-only-input"
+                label="ROW"
+                defaultValue={profile.row}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-read-only-input"
+                label="COLUMN"
+                defaultValue={profile.column}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-read-only-input"
+                label="BAY"
+                defaultValue={profile.bay}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-read-only-input"
+                label="SIDE"
+                defaultValue={profile.side.toUpperCase()}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-read-only-input"
+                label="WELL"
+                defaultValue={profile.well}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-read-only-input"
+                label="SAMPLE"
+                defaultValue={profile.sample}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-read-only-input"
+                label="STATUS"
+                defaultValue={profile.status}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true
+                }}
+                variant="outlined"
+              />
+              <div>
+                <TextField
+                  id="outlined-read-only-input"
+                  label="MIN-DEPTH"
+                  defaultValue={profile.depth.min}
+                  className={classes.textField}
+                  margin="normal"
+                  InputProps={{
+                    readOnly: true
+                  }}
+                  variant="outlined"
+                />
+                <TextField
+                  id="outlined-read-only-input"
+                  label="MAX-DEPTH"
+                  defaultValue={profile.depth.max}
+                  className={classes.textField}
+                  margin="normal"
+                  InputProps={{
+                    readOnly: true
+                  }}
+                  variant="outlined"
+                />
+              </div>
+            </div>
+            <div class="col col-sm-4">
+              <Card className={classes.card}>
+                {/* <CardActionArea> */}
+                <CardMedia
+                  className={classes.media}
+                  // image="https://res.cloudinary.com/malikgen/image/upload/v1539516894/v2k2jqrdzci2waxzldoo.jpg"
+                  image="http://localhost:5000/1.jpg"
+                  title="Contemplative Reptile"
+                />
+              </Card>
+            </div>
+          </div>
         </div>
 
         // </div>
@@ -271,13 +272,11 @@ class DeletedStock extends Component {
               </Link>
             </div>
           </div>
-          <div className="row ">
-            <div className="col col-md-6 m-auto">
-              <div ref={el => (this.componentRef = el)} className="col-md-12">
-                {profileContentBig}
-              </div>
-            </div>
-          </div>
+          {/* <div className="row"> */}
+          {/* <div className="col col-sm-12 m-auto"> */}
+          <div>{profileContentBig}</div>
+          {/* </div> */}
+          {/* </div> */}
         </div>
       </div>
     );

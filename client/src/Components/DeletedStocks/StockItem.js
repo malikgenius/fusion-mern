@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getProfileById } from '../../actions/profileAction';
+import { getDeletedStockById } from '../../actions/profileAction';
 
 class StockItem extends Component {
   // onStockClick = id => {
@@ -57,7 +57,7 @@ class StockItem extends Component {
         <td className="text-center">{profile.status}</td>
 
         <td className="mr-auto">
-          <Link to={`/stock/${profile._id}`}>
+          <Link to={`/deleted-stock/${profile._id}`}>
             <i
               // onClick={() => this.onStockClick(profile._id)}
               className="far fa-edit text-primary"
@@ -105,5 +105,5 @@ class StockItem extends Component {
 
 export default connect(
   null,
-  { getProfileById }
+  { getDeletedStockById }
 )(StockItem);

@@ -303,7 +303,7 @@ export const getDeletedStocks = page => dispatch => {
 
 // Get Profile by ID
 export const getDeletedStockById = id => dispatch => {
-  // console.log(id);
+  console.log(id);
   dispatch(setProfileLoading());
   axios
     .get(`/api/stock/deleted-stock/${id}`)

@@ -59,9 +59,11 @@ app.use('/api/reset', reset_verify);
 app.use('/api/stock', stock);
 app.use('/api/upload', upload);
 
+app.use(express.static('public'));
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
+  app.use(express.static('public'));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
