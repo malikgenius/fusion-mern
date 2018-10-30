@@ -5,6 +5,7 @@ const fs = require('fs');
 mongoose.Promise = global.Promise;
 const passport = require('passport');
 
+// if env= PRODUCTION it will use Prod Keys in Keys, and its all saved in env
 // Simple mongoose.com to only open single connection to DB.
 mongoose
   .connect(

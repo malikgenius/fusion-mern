@@ -6,13 +6,7 @@ const passport = require('passport');
 const fs = require('fs');
 const path = require('path');
 
-// require('./mongodb/mongodb');
-// mongodb load on startup
-// if (process.env.NODE_ENV === 'production') {
-//   require('./mongodb/mongodbMlab');
-// } else {
-//   require('./mongodb/mongodb');
-// }
+// if env=PRODUCTION mongodb will use MONGOURI which is saved in env if not production it will take it from dev keys.
 require('./mongodb/mongodb');
 // web-push for push notifications
 
@@ -62,8 +56,8 @@ app.use('/api/upload', upload);
 app.use(express.static('public'));
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build', 'public'));
-  // app.use(express.static('public'));
+  app.use(express.static('public'));
+  app.use(express.static('client/build'));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });

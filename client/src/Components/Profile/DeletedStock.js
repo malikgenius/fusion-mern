@@ -250,7 +250,7 @@ class DeletedStock extends Component {
                 <CardMedia
                   className={classes.media}
                   // image="https://res.cloudinary.com/malikgen/image/upload/v1539516894/v2k2jqrdzci2waxzldoo.jpg"
-                  image="http://localhost:5000/1.jpg"
+                  image={profile.imageurl}
                   title="Contemplative Reptile"
                 />
               </Card>
