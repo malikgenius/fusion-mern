@@ -3,12 +3,10 @@ const router = express.Router();
 // const mongoose = require('mongoose');
 const passport = require('passport');
 const Joi = require('joi');
-
 // Load Profile Model
 const Stock = require('../../../model/Stock');
 const DeletedStock = require('../../../model/DeletedStock');
 const User = require('../../../model/User');
-
 // @route   GET api/stock/all
 // @desc    Get all stocks
 // @access  Private
@@ -102,7 +100,7 @@ router.get(
     //paginate custom options we have to add all sorting, limiting etc in these options only.
     console.log(req.query);
     const pageNumber = req.query.page;
-    const search = req.query.search;
+    const search = req.query.search.trim();
     const option = req.query.option;
     // if (option === 'box' || option === '_id') {
     // const mysearch = parseInt(search, 10);
@@ -176,19 +174,24 @@ router.get(
     //paginate custom options we have to add all sorting, limiting etc in these options only.
     console.log(req.query, 'i am free search');
     const pageNumber = req.query.page;
-    const search = req.query.search;
+    const search = req.query.search.trim();
     //below will search for malik but if malikmazhar is available it will bring that as well. $ is not at the end will continue looking for similar words.
     const regexFree = new RegExp(['^', search].join(''), 'i');
+    // below will search in all given options but only exact match will work, it doesnt bring similar like $in
     Stock.paginate(
+      // below will search in any field and regex will help to find similars... it does not work on integers .. so box and depth are not aplicable
       {
         $or: [
-          { bay: search },
-          { row: search },
-          { column: search },
-          { side: search },
-          { well: search },
-          { sample: search },
-          { status: search }
+          { bay: { $in: regexFree } },
+          { row: { $in: regexFree } },
+          { column: { $in: regexFree } },
+          { side: { $in: regexFree } },
+          { well: { $in: regexFree } },
+          { sample: { $in: regexFree } },
+          { status: { $in: regexFree } }
+          // below are ints they are not applicable ... will have to find a way
+          // { 'depth.min': { $in: regexFree } },
+          // { 'depth.min': { $in: regexFree } }
         ]
       },
       {

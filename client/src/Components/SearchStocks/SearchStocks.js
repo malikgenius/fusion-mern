@@ -64,6 +64,14 @@ const options = [
     label: 'Column'
   },
   {
+    value: 'depth.min',
+    label: 'Min-Depth'
+  },
+  {
+    value: 'depth.max',
+    label: 'Max-Depth'
+  },
+  {
     value: 'well',
     label: 'Well'
   },
@@ -88,7 +96,7 @@ class SearchStocks extends Component {
       dropdownOpen: false,
       splitButtonOpen: false,
       search: '',
-      option: null,
+      option: 'option',
       activePage: 1,
       pages: '',
       total: '',
@@ -139,13 +147,15 @@ class SearchStocks extends Component {
     if (code === 13) {
       this.props.clearAllProfiles();
       //13 is the enter keycode
-      if (this.state.option === null) {
+      if (this.state.option === 'option') {
         this.props.getFreeSearch(this.state.activePage, search);
-      }
-      if (this.state.option === 'box') {
+      } else if (this.state.option === 'box') {
         this.props.getIntStocks(this.state.activePage, search, option);
-      }
-      if (this.state.option === '_id') {
+      } else if (this.state.option === 'depth.min') {
+        this.props.getIntStocks(this.state.activePage, search, option);
+      } else if (this.state.option === 'depth.max') {
+        this.props.getIntStocks(this.state.activePage, search, option);
+      } else if (this.state.option === '_id') {
         this.props.getIntStocks(this.state.activePage, search, option);
       } else {
         this.props.getSearchedProfiles(this.state.activePage, search, option);
@@ -159,13 +169,15 @@ class SearchStocks extends Component {
     this.props.clearAllProfiles();
     // if search for _id and box which are ObjectID and Int we need to change route as regex doesnt like int and it will only search through string.
     // getIntStocks will take us to /api/stock/int where we are not using regex but normal search..
-    if (this.state.option === null) {
+    if (this.state.option === 'option') {
       this.props.getFreeSearch(this.state.activePage, search);
-    }
-    if (this.state.option === 'box') {
+    } else if (this.state.option === 'box') {
       this.props.getIntStocks(this.state.activePage, search, option);
-    }
-    if (this.state.option === '_id') {
+    } else if (this.state.option === 'depth.min') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === 'depth.max') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === '_id') {
       this.props.getIntStocks(this.state.activePage, search, option);
     } else {
       this.props.getSearchedProfiles(this.state.activePage, search, option);
@@ -177,16 +189,18 @@ class SearchStocks extends Component {
     const search = this.state.search;
     const option = this.state.option;
     this.setState({ activePage: pageToLoad });
-    if (this.state.option === null) {
-      this.props.getFreeSearch(pageToLoad, search);
-    }
-    if (this.state.option === 'box') {
-      this.props.getIntStocks(pageToLoad, search, option);
-    }
-    if (this.state.option === '_id') {
-      this.props.getIntStocks(pageToLoad, search, option);
+    if (this.state.option === 'option') {
+      this.props.getFreeSearch(this.state.activePage, search);
+    } else if (this.state.option === 'box') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === 'depth.min') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === 'depth.max') {
+      this.props.getIntStocks(this.state.activePage, search, option);
+    } else if (this.state.option === '_id') {
+      this.props.getIntStocks(this.state.activePage, search, option);
     } else {
-      this.props.getSearchedProfiles(pageToLoad, search, option);
+      this.props.getSearchedProfiles(this.state.activePage, search, option);
     }
     // this.props.getSearchedProfiles(pageToLoad, search, option);
     // if (pageNumber !== this.state.pages) {
@@ -245,7 +259,7 @@ class SearchStocks extends Component {
                       endAdornment: (
                         <InputAdornment position="end">
                           <i
-                            class="fas fa-search"
+                            className="fas fa-search"
                             style={{ cursor: 'pointer' }}
                             onClick={this.onSearchClicked}
                           />

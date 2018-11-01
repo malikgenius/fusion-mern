@@ -103,6 +103,7 @@ export const getIntStocks = (page, search, option) => dispatch => {
 export const getFreeSearch = (page, search) => dispatch => {
   dispatch(setProfileLoading());
   dispatch(clearAllProfiles());
+  console.log(`freesearch ${search}`);
   axios
     .get(`/api/stock/freesearch`, {
       params: { page, search }
